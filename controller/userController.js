@@ -42,7 +42,7 @@ exports.signUp=async(req,res)=>{
         })
 
          const token=Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"1hr"})
-         const verifyLink=`${req.protocol}://${req.get('host')}/api/v1/verification/${token}`
+         const verifyLink=`https://trackfundz-wmhv.onrender.com/api/v1/verification/${token}`
          
          const mailOption={
                 email:user.email,
@@ -84,7 +84,7 @@ exports.verifyEmail=async(req,res)=>{
         return res.status(400).json({ message: 'Your email is already verified. No need to verify again.' })
         }
         user.isVerified=true
-        user.save()
+        await user.save()
         res.status(200).json({ message: 'Your email has been successfully verified! You can now log in to your account.' })
         
     } catch (error) {
@@ -108,7 +108,7 @@ exports.resendVerification=async(req,res)=>{
             return res.status(400).json({ message: 'Your email is already verified. No need to resend the verification link.' })
             }
         const token=Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:'1hr'})
-        const verifyLink=`${req.protocol}://${req.get('host')}/api/v1/verification/${token}`
+        const verifyLink=`https://trackfundz-wmhv.onrender.com/api/v1/verification/${token}`
         const mailOption={
             email:user.email,
             subject:`reverification email`,
@@ -162,7 +162,7 @@ exports.forgetPassword=async(req,res)=>{
         return res.status(404).json('user not found')
         }
         const passwordToken=Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"10 mins"})
-        const verificationLink=`${req.protocol}://${req.get('host')}/api/v1/verifyPassword/${passwordToken}`
+        const verificationLink=`https://trackfundz-wmhv.onrender.com/api/v1/verifyPassword/${passwordToken}`
         const mailOption={
             email:user.email,
             subject:`forgetten password`,
@@ -247,7 +247,7 @@ exports.changePassword = async (req, res) => {
 exports.makeAdmin=async(req,res)=>{
 try {
     const {userId}=req.params
-    const user=await userModel.findById({userId})
+    const user=await userModel.findById(userId)
     if(!user){
         return res.status(404).json('user not found.')
     }
@@ -263,7 +263,7 @@ try {
 exports.getOne=async(req,res)=>{
     try {
         const {userId}=req.params
-        const user=await userModel.findById({userId})
+        const user=await userModel.findById(userId)
         if(!user){
             return res.status(404).json({message:`user with the id:${userId} does not exist`})
         }
