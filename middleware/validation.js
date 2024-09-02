@@ -38,11 +38,11 @@ exports.signUpValidation=async(req,res,next)=>{
         .max(20)  
         .required()  
         .messages({  
-            'string.empty': 'Password cannot be empty.',  
-            'string.pattern.base': 'Password must contain at least one uppercase letter, one lowercase letter, and one number.',  
-            'string.min': 'Password must be at least 8 characters long.',  
-            'string.max': 'Password must be at most 20 characters long.',  
-            'any.required': 'Password is required.'  
+            'string.empty': 'confirm Password cannot be empty.',  
+            'string.pattern.base': 'confirm Password must contain at least one uppercase letter, one lowercase letter, and one number.',  
+            'string.min': 'confirm Password must be at least 8 characters long.',  
+            'string.max': 'confirm Password must be at most 20 characters long.',  
+            'any.required': 'confirm Password is required.'  
         })  ,
         
         })

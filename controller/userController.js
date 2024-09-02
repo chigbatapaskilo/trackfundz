@@ -260,3 +260,35 @@ try {
         errorMessage:error.message})
 }
 }
+exports.getOne=async(req,res)=>{
+    try {
+        const {userId}=req.params
+        const user=await userModel.findById({userId})
+        if(!user){
+            return res.status(404).json({message:`user with the id:${userId} does not exist`})
+        }
+        res.status(200).json({message: `Welcome to Trakfundz, ${user.firstName}! You can track your loans, debt balances, and repayment schedules all in one place. Take control of your finances and start building a debt-free future today!`,  
+        data: user  })
+        
+    } catch (error) {
+        res.status(500).json({
+            message: 'An error occurred while processing your request.',
+            errorMessage:error.message})
+    }
+}
+exports.getAll=async(req,res)=>{
+    try {
+        const allUsers=await userModel.find()
+        if(allUsers.length===0){
+            return res.status(404).json({
+                message: 'No registered users in the database.'
+            })
+        }
+        res.status(200).json({message: 'Here are all the registered users in the database:',  
+            data: allUsers })
+    } catch (error) {
+        res.status(500).json({
+            message: 'An error occurred while processing your request.',
+            errorMessage:error.message})
+    }
+}
