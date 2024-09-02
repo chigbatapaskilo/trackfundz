@@ -14,6 +14,6 @@ router.post('/verifyPassword/:passwordToken',forgetPasswordValidation,resetPassw
 router.post('/changePassword',changePasswordValidation,changePassword)
 router.post('/makeadmin/:userId',makeAdmin)
 router.get('/oneuser/:userId',getOne)
-router.get('/alluser',authorize,isAdmin,getAll)
+router.get('/alluseruserId/:',authorize,isAdmin,getAll)
 module.exports=router
 //upload.single('profilePicture')
