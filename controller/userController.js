@@ -1,17 +1,19 @@
 const sendMail=require('../helper/mail');
-const {signUpTemplate,reSendverificationTemplate,forgetPasswordtemplate}=require('../helper/templates')
+const {signUpTemplate,reSendverificationTemplate}=require('../helper/templates')
 const bcrypt =require('bcrypt');
 const Jwt=require('jsonwebtoken')
 const userModel=require('../model/userModel')
 const cloudinary=require('../config/cloudinary')
 require('dotenv').config()
+const fs=require('fs');
+
 
 
 exports.signUp=async(req,res)=>{
     try {
        
-        const {firstName,lastName,email,password,confirmPassword,phoneNumber}=req.body
-        if(!firstName||!lastName||!email||!password||!phoneNumber||!confirmPassword){
+        const {firstName,lastName,email,password,confirmPassword,phoneNumber, profilePicture}=req.body
+        if(!firstName||!lastName||!email||!password||!phoneNumber||!confirmPassword ){
             return res.status(400).json(
                 { message: 'Please make sure all fields are filled out.' })
         }
@@ -36,6 +38,7 @@ exports.signUp=async(req,res)=>{
          lastName,
          email:email.toLowerCase(),
          phoneNumber,
+         profilePicture,
          password:hashPassword,
          
         
@@ -76,7 +79,7 @@ exports.verifyEmail=async(req,res)=>{
         const {token}=req.params
         const {email}=Jwt.verify(token,process.env.JWT_SECRET)
     
-        const user=await userModel.findOne({email})
+        const user=await userModel.findOne({email:email.toLowerCase()})
         if(!user){
             return res.status(404).json({ message: 'We could not find a user with this email address. Please make sure you’ve entered the correct one.' })
         }
@@ -154,96 +157,7 @@ exports.login=async(req,res)=>{
         })
     }
 }
-exports.forgetPassword=async(req,res)=>{
-    try {
-        const {email}=req.body
-        const user=await userModel.findOne({email})
-        if(!user){
-        return res.status(404).json('user not found')
-        }
-        const passwordToken=Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"10 mins"})
-        const verificationLink=`https://trackfundz-wmhv.onrender.com/api/v1/verifyPassword/${passwordToken}`
-        const mailOption={
-            email:user.email,
-            subject:`forgetten password`,
-            html:forgetPasswordtemplate(verificationLink,user.firstName)
-        }
-        await sendMail(mailOption)
-        res.status(200).json('check your email to confirm and reset password')
-        
-    } catch (error) {
-        if(error instanceof Jwt.JsonWebTokenError){
-            return res.status(error.message)
-        }
-        res.status(500).json(error.message)
-    }
-}
-exports.resetPassword=async(req,res)=>{
-    try {
-        const {passwordToken}=req.params
-        const {password}=req.body
-        const {email}=Jwt.verify(passwordToken,process.env.JWT_SECRET)
-        const user=await userModel.findOne({email})
-        if(!user){
-            return res.status(404).json('user not found')
-        }
-        const saltPassword=await bcrypt.genSalt(10)
-        const hashPassword=await bcrypt.hash(password,saltPassword)
-        user.password=hashPassword
-        await user.save()
-        res.status(200).json('password successfully changed')
-    } catch (error) {
-       res.status(500).json({
-        message: 'An error occurred while processing your request.',
-        errorMessage:error.message})
-    }
-}
-exports.changePassword = async (req, res) => {
-    try {
-        const { token } = req.params
-        const { password, existingPassword } = req.body;
 
-       
-        const { email } = Jwt.verify(token, process.env.JWT_SECRET);
-
-        const user = await userModel.findOne({ email });
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found.",
-            });
-        }
-
-        
-        const isPasswordMatch = await bcrypt.compare(existingPassword,user.password);
-        if (!isPasswordMatch) {
-            return res.status(401).json({
-                message: "Existing password does not match.",
-            })
-        }
-        if(password===existingPassword){
-         return res.status(401).json({
-            message:'your new password must be diffirent from existing password'
-         })
-        }
-
-    
-        const saltedRound = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, saltedRound);
-
-    
-        user.password = hashedPassword;
-        await user.save();
-
-        res.status(200).json({
-            message: "Password changed successful",
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: 'An error occurred while processing your request.',
-            message: error.message,
-        })
-    }
-};
 exports.makeAdmin=async(req,res)=>{
 try {
     const {userId}=req.params
@@ -286,6 +200,46 @@ exports.getAll=async(req,res)=>{
         }
         res.status(200).json({message: 'Here are all the registered users in the database:',  
             data: allUsers })
+    } catch (error) {
+        res.status(500).json({
+            message: 'An error occurred while processing your request.',
+            errorMessage:error.message})
+    }
+}
+exports.updateuserdetails=async(req,res)=>{
+    try {
+        const {userId}=req.params
+        const {phoneNumber,firstName,lastName}=req.body
+        const user=await userModel.findById(userId)
+        if(!user){
+            return res.status(404).json('user not found.')
+        }
+     
+        const data={
+            phoneNumber:phoneNumber||user.phoneNumber,
+            firstName:firstName||user.firstName,
+            lastName:lastName||user.lastName,
+            
+        }
+       
+         
+         if (req.file) {
+            const cloudProfile = await cloudinary.uploader.upload(req.file.path, { folder: "profilePicture" });
+      
+            data.profilePicture = {
+              pictureUrl: cloudProfile.secure_url
+            }
+          } else {  
+            return res.status(400).json('No file uploaded.');  
+        }  
+        const updatedUser = await userModel.findByIdAndUpdate(userId,data,{new:true});
+    res.status(200).json({
+        message: "profile updated successfully",
+        data:updatedUser
+    })
+
+    
+        
     } catch (error) {
         res.status(500).json({
             message: 'An error occurred while processing your request.',

@@ -1,5 +1,6 @@
 const router=require('express').Router();
-const { signUp, verifyEmail, resendVerification, forgetPassword, resetPassword, changePassword, login, makeAdmin, getOne, getAll } = require('../controller/userController');
+const { signUp, verifyEmail, resendVerification,  login, makeAdmin, getOne, getAll, updateuserdetails } = require('../controller/userController');
+const {forgetPassword, resetPassword, changePassword}=require('../controller/passwordController')
 const { authorize, isAdmin } = require('../middleware/auth');
 const { signUpValidation, forgetPasswordValidation, changePasswordValidation, loginvalidator } = require('../middleware/validation');
 const upload=require('../utils/multer');
@@ -15,5 +16,5 @@ router.post('/changePassword',changePasswordValidation,changePassword)
 router.post('/makeadmin/:userId',makeAdmin)
 router.get('/oneuser/:userId',getOne)
 router.get('/alluseruserId/:',authorize,isAdmin,getAll)
+router.put('/update/:userId',upload.single('profilePicture'),updateuserdetails)
 module.exports=router
-//upload.single('profilePicture')

@@ -15,10 +15,11 @@ exports.signUpValidation=async(req,res,next)=>{
             "string.min": "last name must be at least 3 characters long.",
             "string.pattern.base": "last name should only contain letters.",
         }),
-        email:joi.string().email().required().messages({
-            "any.required": "Please provide an email.",
-            "string.email": "Please provide a valid email address.",
-        }),
+        email: joi.string().email().required().pattern(/@(gmail\.com|yahoo\.com)$/).messages({  
+            "any.required": "Please provide an email.",  
+            "string.email": "Please provide a valid email address.",  
+            "string.pattern.base": "Email must end with @gmail.com or @yahoo.com."  
+        }) ,
         phoneNumber:joi.string().required().regex(/^\d{11}$/).message('Phone number must be exactly 11 digits',),
         password: joi.string()  
         .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}$/)  

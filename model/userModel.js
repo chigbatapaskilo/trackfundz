@@ -37,7 +37,35 @@ const userSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    blacklist:[]
+    profilePicture:{
+        profileUrl:{type:String}
+    },
+    availableBalance:{
+        type:Number,
+        trim:true,
+        default:0
+    },
+    totalExpenses:{
+        type:Number,
+        default:0
+    },
+    expenseTracker:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"expenses"
+    }],
+    budgetPlanner:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"budget"
+    }],
+    debtManager:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"debt"
+    }],
+    userIncome:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"income"  
+    }],
+   blacklist:[]
   
 },{timestamps:true});
 const userModel=mongoose.model('financialMangement',userSchema);
