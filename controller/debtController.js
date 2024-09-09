@@ -88,13 +88,13 @@ exports.payDebt=async(req,res)=>{
 
          const acheiveGoal=Number(checkUser.totaldebtPaid)+Number(amount)
          checkUser.totaldebtPaid=acheiveGoal
-         const categoryGoal=Number(findDebt.debtRemaining)-Number(amount)
+         const categoryDebtRemaining=Number(findDebt.debtRemaining)-Number(amount)
 
         
         const debtData={
             datePaid:date.toLocaleDateString(),
             amountPaid:amount,
-            debtRemaining:categoryGoal
+            debtRemaining:categoryDebtRemaining
         }
         const updateDebtPayment=await debtModel.findByIdAndUpdate(debtId, debtData,{new:true})
         await checkUser.save()
