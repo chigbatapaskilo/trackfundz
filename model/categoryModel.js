@@ -6,10 +6,18 @@ const categorySchema=new mongoose.Schema({
         trim:true,
         require:true
     },
-    addExpense:[{
+    expenseTracker:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'expenses'
+        ref:"expenses"
     }],
+    budgetPlanner:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"budget"
+    }],
+    debtManager:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"debt"
+    }]
  
 },{timestamps:true})
 const categorys=mongoose.model("categories",categorySchema)

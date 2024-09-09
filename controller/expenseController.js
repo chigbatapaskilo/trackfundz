@@ -1,6 +1,7 @@
 const ExpenseModel=require('../model/expenseModel')
-const categoryModel=require('../model/categoryModel')
-const userModel = require('../model/userModel')
+
+const userModel = require('../model/userModel');
+const categorys = require('../model/categoryModel');
 
 
 // exports.createIncome=async(req,res)=>{
@@ -83,6 +84,26 @@ const userModel = require('../model/userModel')
 //     }
 //     }
 
+// exports.getTotalExpenseAmount = async (req, res) => {  
+//     try {  
+//         const { userId } = req.user; // Get the user ID from the request  
+//         const expenses = await ExpenseModel.find({ userId }); // Find all expenses for the user  
+
+//         // Calculate the total expense amount  
+//         const totalExpense = expenses.totalExpenses;  
+
+//         res.status(200).json({  
+//             message: 'Total expense amount retrieved successfully',  
+//             totalExpense  
+//         });  
+//     } catch (error) {  
+//         res.status(500).json({  
+//             message: 'An error occurred while fetching total expense amount.',  
+//             errorMessage: error.message  
+//         });  
+//     }  
+// };
+
 exports.createExpense = async (req, res) => {  
     try {  
         const { userId } = req.user;  
@@ -97,7 +118,7 @@ exports.createExpense = async (req, res) => {
         
         
         const { categoryId } = req.params;  
-        const checkCategory = await categoryModel.findById(categoryId);  
+        const checkCategory = await categorys.findById(categoryId);  
         if (!checkCategory) {  
             return res.status(404).json({  
                 message: 'Category not found'  
@@ -132,7 +153,7 @@ exports.createExpense = async (req, res) => {
        
        
         await expenseMade.save();  
-        checkCategory.addExpense.push(expenseMade._id);  
+        checkCategory.expenseTracker.push(expenseMade._id);  
         await checkCategory.save()
         checkUser.expenseTracker.push(expenseMade._id)
         await checkUser.save()
@@ -167,27 +188,6 @@ exports.expenseHistoryForAcategory = async (req, res) => {
     }  
 };  
 
-
-// exports.getTotalExpenseAmount = async (req, res) => {  
-//     try {  
-//         const { userId } = req.user; // Get the user ID from the request  
-//         const expenses = await ExpenseModel.find({ userId }); // Find all expenses for the user  
-
-//         // Calculate the total expense amount  
-//         const totalExpense = expenses.totalExpenses;  
-
-//         res.status(200).json({  
-//             message: 'Total expense amount retrieved successfully',  
-//             totalExpense  
-//         });  
-//     } catch (error) {  
-//         res.status(500).json({  
-//             message: 'An error occurred while fetching total expense amount.',  
-//             errorMessage: error.message  
-//         });  
-//     }  
-// };
-
 exports.expenseHistory = async (req, res) => {  
     try {  
         const { userId} = req.user;  
@@ -203,19 +203,46 @@ exports.expenseHistory = async (req, res) => {
         });  
     }  
 };  
+exports.getOneExpense=async(req,res)=>{
+    try {
+        const {expenseId}=req.params
+        const expense=await ExpenseModel.findById(expenseId)
+        if(!expense){
+            return res.status(404).json({
+                message:'expense not found'
+            })
+        }
+     res.status(200).json({
+        message:'get me the user',
+        data:expense
+     })
+
+        
+        
+    } catch (error) {
+        res.status(500).json({
+            message:'server error',
+            errorMessage:error.message
+          })  
+    }
+}
 exports.deleteExpense=async(req,res)=>{
     try {
         const {expenseId}=req.params
-        const expenseMade=await todoModel.findById(expenseId)
+        const {categoryId}=req.params
+        const expenseMade=await ExpenseModel.findById(expenseId)
         if(!expenseMade){
          return res.status(404).json({
             message:'expense  not found'
          })
         }
-        const deleteContent=await todoModel.findByIdAndDelete(expenseId)
+        const deleteContent=await ExpenseModel.findByIdAndDelete(expenseId)
         const {userId}=req.user
+        const categoryExpense=await categorys.findById(categoryId)
+        categoryExpense.expenseTracker.pull(expenseId)
+        categoryExpense.save()
         const users=await userModel.findById(userId)
-        users. expenseTracker.pop(expenseId)
+        users. expenseTracker.pull(expenseId)
         await users.save()
         res.status(200).json({
             message:'deteted successful'

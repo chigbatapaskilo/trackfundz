@@ -232,6 +232,7 @@ exports.updateuserdetails=async(req,res)=>{
           } else {  
             return res.status(400).json('No file uploaded.');  
         }  
+       
         const updatedUser = await userModel.findByIdAndUpdate(userId,data,{new:true});
     res.status(200).json({
         message: "profile updated successfully",

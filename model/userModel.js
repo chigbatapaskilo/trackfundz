@@ -49,6 +49,27 @@ const userSchema=new mongoose.Schema({
         type:Number,
         default:0
     },
+    totalTargetGoal:{
+        type:Number,
+        trim:true,
+        default:0
+    },
+    totalAmountReached:{
+        type:Number,
+        trim:true,
+        default:0
+    },
+    totalDebtAmount:{
+        type:Number,
+        trim:true,
+        default:0
+    },
+    totaldebtPaid:{
+        type:Number,
+        trim:true,
+        default:0
+    },
+
     expenseTracker:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"expenses"

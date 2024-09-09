@@ -6,13 +6,23 @@ const budgetSchema=new mongoose.Schema({
         type:String
     },
     target:{
-        type:Number
+        type:Number,
+        require:true
     },
     duration:{
         type:String
     },
-    totalBudget:{
+    amount:{
         type:Number
+    },
+    targetRemaining:{
+        type:Number,
+       
+    },
+    Status:{
+        type:String,
+        enum:['inprogress','completed'],
+        default:'inprogress'
     },
     Trackuser:[{
         type:mongoose.Schema.Types.ObjectId,
