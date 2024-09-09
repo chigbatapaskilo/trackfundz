@@ -64,7 +64,7 @@ exports.payDebt=async(req,res)=>{
                 message:'user not found'
             })
         }
-        const checkCategory=await userModel.findById(categoryId)
+        const checkCategory=await categorys.findById(categoryId)
         if(!checkCategory){
             return res.status(404).json({
                 message:'category not found'
