@@ -29,6 +29,12 @@ app.use('/api/v1/debt',debtRoute)
 const PORT = process.env.PORT || 2090;
 
 // Start the server
+
+app.get("/",(req,res)=>{
+    res.status(200).json({
+        message:"WELCOME TO TRACKFUND"
+    })
+})
 app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`);
 });
