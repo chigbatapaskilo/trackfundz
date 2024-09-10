@@ -30,7 +30,7 @@ exports.createIncome = async (req, res) => {
         const addIncome = new IncomeModel({  
             income,  
             paymentName,  
-            Trackuser: checkUser._id 
+           
         }); 
         
         await addIncome.save();  
@@ -50,3 +50,19 @@ exports.createIncome = async (req, res) => {
         });  
     }  
 };  
+exports.IncomeHistory=async(req,res)=>{
+    try {
+       const {userId }=req.user
+       const income=await IncomeModel.find({Trackuser:userId }).sort({ createdAt: -1 })
+       res.status(200).json({
+        message:'users income',
+        data:income
+       })
+        
+    } catch (error) {
+        res.status(500).json({  
+            message: 'An error occurred while processing your request.',  
+            errorMessage: error.message  
+        })  
+    }
+}

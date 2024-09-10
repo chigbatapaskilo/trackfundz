@@ -6,6 +6,7 @@ const router = require('./router/userRouter');
 const expenseRoute = require('./router/expenseRouter');
 const cateRouter = require('./router/categoryRouter');
 const debtRoute = require('./router/debtRouter');
+const budgetRoute = require('./router/budgetRouter');
 require('./config/db'); // Connect to the database
 
 // Create an instance of Express
@@ -23,6 +24,7 @@ app.use('/api/v1', router);
 app.use('/api/v1/category',cateRouter)
 app.use('/api/v1/expenses',expenseRoute)
 app.use('/api/v1/debt',debtRoute)
+app.use('api/v1/budget',budgetRoute)
 
 
 // Define the port

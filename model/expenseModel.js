@@ -14,6 +14,9 @@ description:{
     type:String,
     trim:true
 }, 
+datePaid:{
+    type:String
+},
 
 category:[{
     type:mongoose.Schema.Types.ObjectId,

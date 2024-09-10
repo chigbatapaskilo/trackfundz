@@ -16,40 +16,42 @@ exports.createBudget=async(req,res)=>{
             return res.status(404).json({message:'category  not found'})
         }
         
-          const newTarget=Number(checkUser.totalTargetGoal) +Number(target)
-          checkUser.totalTargetGoal=newTarget
-          const setTarget=new budgetModel({
+        const newTarget=Number(checkUser.totalTargetGoal) +Number(target)
+        checkUser.totalTargetGoal=newTarget
+          
+        const setTarget=new budgetModel({
             description,
             target,
             duration,
             Status,
             targetRemaining:target,
-            Trackuser:userId,
-            category:categoryId
-
-          })
-          await setTarget.save()
-          checkCategory.budgetPlanner.push(setTarget._id)
-          await checkCategory.save()
-          checkUser.budgetPlanner.push(setTarget._id)
+        })
+        
+        await setTarget.save()
+        
+        checkCategory.budgetPlanner.push(setTarget._id)
+        
+        await checkCategory.save()
+        
+        checkUser.budgetPlanner.push(setTarget._id)
+        
         await checkUser.save()
 
-       res.status(201).json({
+        res.status(201).json({
         message:'new target set '
-       })
-    } catch (error) {
+        })
+    }catch(error) {
         res.status(500).json({
             message: 'An error occurred while processing your request.',
-            errorMessage:error.message})
-    }
+            errorMessage:error.message})}
 }
 
 exports.saveForTarget=async(req,res)=>{
     try {
-        const {budgetId}=req.params
+        const {budgetId,categoryId}=req.params
         const {amount}=req.body
         const {userId}=req.user
-        const {categoryId}=req.params
+       
         const findBudget=await budgetModel.findById(budgetId)
         if(!findBudget){
             return res.status(404).json({
@@ -78,21 +80,21 @@ exports.saveForTarget=async(req,res)=>{
              message:'unable to update another category content'
             })
          }
-         if(findBudget.Status="completed"){
-            return res.status(401).json({
-                message:'you have already acheived the target'
-               }) 
-         }
-
+        
          const acheiveGoal=Number(checkUser.totalAmountReached)+Number(amount)
          checkUser.totalAmountReached=acheiveGoal
-         const categoryGoal=Number(findBudget.targetRemaining)-Number(amount)
-         if(findBudget.targetRemaining ==findBudget.target){
-
-         }
+         const BudgetGoal=Number(findBudget.targetRemaining)-Number(amount)
+         const date=new Date
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];  
+        const dayName = days[date.getUTCDay()];
+        const localMonth = date.getMonth() + 1; // Convert to 1-indexed  
+        const localYear = date.getFullYear() 
+        const fullDate=dayName+" "+ localMonth+"/"+ localYear
+        
         const data={
+            datePaid:fullDate,
             amount,
-            targetRemaining:categoryGoal
+            targetRemaining:BudgetGoal
         }
         const updateBudget=await budgetModel.findByIdAndUpdate(budgetId,data,{new:true})
         res.status(200).json({
@@ -110,7 +112,7 @@ exports.budgetHistoryForAcategory = async (req, res) => {
     try { 
         const { userId} = req.user;  
         const { categoryId } = req.params;  
-        const budget = await budgetModel.find({ category: categoryId,Trackuser:userId }).populate('category').sort({ createdAt: -1 });;  
+        const budget = await budgetModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 });
         res.status(200).json({  
             message: 'budget history retrieved successfully',  
             data: budget  
@@ -161,7 +163,7 @@ exports.getOneBudget=async(req,res)=>{
           })  
     }
 }
-exports.deleteExpense=async(req,res)=>{
+exports.deleteBudget=async(req,res)=>{
     try {
         const {budgetId}=req.params
         const {categoryId}=req.params
@@ -174,10 +176,10 @@ exports.deleteExpense=async(req,res)=>{
         const deleteContent=await budgetModel.findByIdAndDelete(budgetId)
         const {userId}=req.user
         const categoryExpense=await categorys.findById(categoryId)
-        categoryExpense.budgetPlanner.pop(budgetId)
+        categoryExpense.budgetPlanner.pull(budgetId)
         categoryExpense.save()
         const users=await userModel.findById(userId)
-        users. budgetPlanner.pop(budgetId)
+        users. budgetPlanner.pull(budgetId)
         await users.save()
         res.status(200).json({
             message:'deteted successful'

@@ -108,8 +108,13 @@ exports.createExpense = async (req, res) => {
     try {  
         const { userId } = req.user;  
         const checkUser = await userModel.findById(userId)
-       
-        //const checkUser = await userModel.findById(userId);  
+        const date=new Date
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];  
+        const dayName = days[date.getUTCDay()];
+        const localMonth = date.getMonth() + 1; // Convert to 1-indexed  
+        const localYear = date.getFullYear() 
+        const fullDate=dayName+" "+ localMonth+"/"+ localYear
+        
         if (!checkUser) {  
             return res.status(404).json({  
                 message: 'User not found'  
@@ -118,7 +123,8 @@ exports.createExpense = async (req, res) => {
         
         
         const { categoryId } = req.params;  
-        const checkCategory = await categorys.findById(categoryId);  
+        const checkCategory = await categorys.findById(categoryId)
+        const categoryName=checkCategory.name  
         if (!checkCategory) {  
             return res.status(404).json({  
                 message: 'Category not found'  
@@ -145,10 +151,11 @@ exports.createExpense = async (req, res) => {
         const expenseMade = new ExpenseModel({  
             expense,  
             amount,  
-            description,  
-            Trackuser: checkUser._id,  
-            category:categoryId
+            description, 
+            datePaid:fullDate, 
+            
         }); 
+
         
        
        
@@ -159,8 +166,10 @@ exports.createExpense = async (req, res) => {
         await checkUser.save()
          
         res.status(201).json({  
-            message: 'Expense added',  
-            data: expenseMade  
+            message: 'Expense added', 
+            category:categoryName, 
+            data: expenseMade
+
         });  
 
     } catch (error) {  
@@ -175,7 +184,7 @@ exports.expenseHistoryForAcategory = async (req, res) => {
     try { 
         const { userId} = req.user;  
         const { categoryId } = req.params;  
-        const expenses = await ExpenseModel.find({ category: categoryId,Trackuser:userId }).populate('category').sort({ createdAt: -1 });;  
+        const expenses = await ExpenseModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 }); 
         res.status(200).json({  
             message: 'Expense history retrieved successfully',  
             data: expenses  

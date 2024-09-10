@@ -17,7 +17,10 @@ const budgetSchema=new mongoose.Schema({
     },
     targetRemaining:{
         type:Number,
-       
+         
+    },
+    datePaid:{
+        type:String
     },
     Status:{
         type:String,

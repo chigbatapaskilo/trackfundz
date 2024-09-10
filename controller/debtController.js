@@ -23,8 +23,6 @@ exports.createdebt=async(req,res)=>{
             debtOwed,
             duration,
             debtRemaining:debtOwed,
-            Trackuser:userId,
-            category:categoryId
 
           })
           await Debt.save()
@@ -50,6 +48,11 @@ exports.payDebt=async(req,res)=>{
         const {debtId,categoryId}=req.params
         const {amount}=req.body
         const date=new Date
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];  
+        const dayName = days[date.getUTCDay()];
+        const localMonth = date.getMonth() + 1; // Convert to 1-indexed  
+        const localYear = date.getFullYear() 
+        const fullDate=dayName+" "+ localMonth+"/"+ localYear
         const {userId}=req.user
         
         const findDebt=await debtModel.findById(debtId)
@@ -80,11 +83,8 @@ exports.payDebt=async(req,res)=>{
              message:'unable to update another category content'
             })
          }
-         if(findDebt.Status="completed"){
-            return res.status(401).json({
-                message:'you have already acheived the target'
-               }) 
-         }
+        
+         
 
          const acheiveGoal=Number(checkUser.totaldebtPaid)+Number(amount)
          checkUser.totaldebtPaid=acheiveGoal
@@ -92,10 +92,11 @@ exports.payDebt=async(req,res)=>{
 
         
         const debtData={
-            datePaid:date.toLocaleDateString(),
+            datePaid:fullDate,
             amountPaid:amount,
             debtRemaining:categoryDebtRemaining
         }
+
         const updateDebtPayment=await debtModel.findByIdAndUpdate(debtId, debtData,{new:true})
         await checkUser.save()
         res.status(200).json({
@@ -113,7 +114,7 @@ exports.DebtHistoryForAcategory = async (req, res) => {
     try { 
         const { userId} = req.user;  
         const { categoryId } = req.params;  
-        const debt = await debtModel.find({ category: categoryId,Trackuser:userId }).populate('category').sort({ createdAt: -1 });;  
+        const debt = await debtModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 });;  
         res.status(200).json({  
             message: 'debt history retrieved successfully',  
             data: debt
@@ -193,3 +194,5 @@ exports.deleteDebt=async(req,res)=>{
           }) 
     }
 }
+
+

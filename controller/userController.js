@@ -103,7 +103,7 @@ exports.verifyEmail=async(req,res)=>{
 exports.resendVerification=async(req,res)=>{
     try {
         const {email}=req.body
-        const user=await userModel.findOne({email})
+        const user=await userModel.findOne({email:email.toLowerCase()})
         if(!user){
             return res.status(400).json({ message: 'We could not find a user with this email address. Please check and try again.' })
         }
@@ -133,7 +133,10 @@ exports.resendVerification=async(req,res)=>{
 exports.login=async(req,res)=>{
     try {
         const {email,password}=req.body
-        const user=await userModel.findOne({email})
+        if(!email||!password){
+            return res.status(400).json({message:'please enter email and password.'})   
+        }
+        const user=await userModel.findOne({email:email.toLowerCase()})
         if(!user){
             return res.status(404).json({ message: 'We could not find an account with this email address. Please check and try again.' })
         }
@@ -144,7 +147,7 @@ exports.login=async(req,res)=>{
         if(!user.isVerified){
             return res.status(400).json({ message: 'Your account has not been verified yet. Please check your email and verify your account before logging in.' })
         }
-        const token =Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"1hr"})
+        const token =Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"2hr"})
         res.status(200).json({
             message:`login successful`,
             data:user,
@@ -211,6 +214,7 @@ exports.updateuserdetails=async(req,res)=>{
         const {userId}=req.params
         const {phoneNumber,firstName,lastName}=req.body
         const user=await userModel.findById(userId)
+        const file=req.file.profilePicture
         if(!user){
             return res.status(404).json('user not found.')
         }
@@ -221,17 +225,25 @@ exports.updateuserdetails=async(req,res)=>{
             lastName:lastName||user.lastName,
             
         }
+        if (file) {
+            // Upload new image to Cloudinary
+            const image = await cloudinary.uploader.upload(file.tempFilePath);
+            // Delete previous image from Cloudinary
+            await cloudinary.uploader.destroy(user.profilePicture);
+            // Update category image URL
+            user.profilePicture = image.secure_url;
+          }
        
          
-         if (req.file) {
-            const cloudProfile = await cloudinary.uploader.upload(req.file.path, { folder: "profilePicture" });
+        //  if (req.file) {
+        //     const cloudProfile = await cloudinary.uploader.upload(req.file.path, { folder: "profilePicture" });
       
-            data.profilePicture = {
-              pictureUrl: cloudProfile.secure_url
-            }
-          } else {  
-            return res.status(400).json('No file uploaded.');  
-        }  
+        //     data.profilePicture = {
+        //       pictureUrl: cloudProfile.secure_url
+        //     }
+        //   } else {  
+        //     return res.status(400).json('No file uploaded.');  
+        // }  
        
         const updatedUser = await userModel.findByIdAndUpdate(userId,data,{new:true});
     res.status(200).json({
