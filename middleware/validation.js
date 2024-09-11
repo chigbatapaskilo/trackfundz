@@ -164,7 +164,7 @@ exports.updateValidation=async(req,res,next)=>{
         next()
 }
 exports.expenseValidation=async(req,res,next)=>{
-    try {
+
 
         const expenseSchema=joi.object({
             expense: joi.string()  
@@ -198,7 +198,5 @@ exports.expenseValidation=async(req,res,next)=>{
         }
         next()  
      
-    } catch (error) {
-        
-    }
+   
 }

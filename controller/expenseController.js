@@ -121,19 +121,9 @@ exports.createExpense = async (req, res) => {
             });  
         }  
         
-        
-        const { categoryId } = req.params;  
-        const checkCategory = await categorys.findById(categoryId)
-        const categoryName=checkCategory.name  
-        if (!checkCategory) {  
-            return res.status(404).json({  
-                message: 'Category not found'  
-            });  
-        }  
+          
         const { expense, amount, description } = req.body;  
-       
-
-        if (amount <= 0) {  
+       if (amount <= 0) {  
             return res.status(400).json({  
                 message: 'Invalid amount. Amount must be a positive value'  
             });  
@@ -153,21 +143,17 @@ exports.createExpense = async (req, res) => {
             amount,  
             description, 
             datePaid:fullDate, 
-            
+            Trackuser:userId
         }); 
 
         
        
        
         await expenseMade.save();  
-        checkCategory.expenseTracker.push(expenseMade._id);  
-        await checkCategory.save()
         checkUser.expenseTracker.push(expenseMade._id)
         await checkUser.save()
-         
-        res.status(201).json({  
+         res.status(201).json({  
             message: 'Expense added', 
-            category:categoryName, 
             data: expenseMade
 
         });  
@@ -180,22 +166,22 @@ exports.createExpense = async (req, res) => {
     }  
 };  
 
-exports.expenseHistoryForAcategory = async (req, res) => {  
-    try { 
-        const { userId} = req.user;  
-        const { categoryId } = req.params;  
-        const expenses = await ExpenseModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 }); 
-        res.status(200).json({  
-            message: 'Expense history retrieved successfully',  
-            data: expenses  
-        });  
-    } catch (error) {  
-        res.status(500).json({  
-            message: 'An error occurred while fetching expense history.',  
-            errorMessage: error.message  
-        });  
-    }  
-};  
+// exports.expenseHistoryForAcategory = async (req, res) => {  
+//     try { 
+//         const { userId} = req.user;  
+//         const { categoryId } = req.params;  
+//         const expenses = await ExpenseModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 }); 
+//         res.status(200).json({  
+//             message: 'Expense history retrieved successfully',  
+//             data: expenses  
+//         });  
+//     } catch (error) {  
+//         res.status(500).json({  
+//             message: 'An error occurred while fetching expense history.',  
+//             errorMessage: error.message  
+//         });  
+//     }  
+// };  
 
 exports.expenseHistory = async (req, res) => {  
     try {  
@@ -238,7 +224,6 @@ exports.getOneExpense=async(req,res)=>{
 exports.deleteExpense=async(req,res)=>{
     try {
         const {expenseId}=req.params
-        const {categoryId}=req.params
         const expenseMade=await ExpenseModel.findById(expenseId)
         if(!expenseMade){
          return res.status(404).json({
@@ -247,9 +232,6 @@ exports.deleteExpense=async(req,res)=>{
         }
         const deleteContent=await ExpenseModel.findByIdAndDelete(expenseId)
         const {userId}=req.user
-        const categoryExpense=await categorys.findById(categoryId)
-        categoryExpense.expenseTracker.pull(expenseId)
-        categoryExpense.save()
         const users=await userModel.findById(userId)
         users. expenseTracker.pull(expenseId)
         await users.save()

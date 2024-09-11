@@ -17,11 +17,6 @@ description:{
 datePaid:{
     type:String
 },
-
-category:[{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'categories'
-}],
 Trackuser:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:'financialMangement'

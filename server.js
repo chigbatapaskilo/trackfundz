@@ -4,7 +4,7 @@ const cors = require('cors');
 const router = require('./router/userRouter');
 
 const expenseRoute = require('./router/expenseRouter');
-const cateRouter = require('./router/categoryRouter');
+// const cateRouter = require('./router/categoryRouter');
 const debtRoute = require('./router/debtRouter');
 const budgetRoute = require('./router/budgetRouter');
 require('./config/db'); // Connect to the database
@@ -21,7 +21,7 @@ app.use('/uploads', express.static('uploads'));
 
 // API routes
 app.use('/api/v1', router);
-app.use('/api/v1/category',cateRouter)
+// app.use('/api/v1/category',cateRouter)
 app.use('/api/v1/expenses',expenseRoute)
 app.use('/api/v1/debt',debtRoute)
 app.use('api/v1/budget',budgetRoute)

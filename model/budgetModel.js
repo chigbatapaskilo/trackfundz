@@ -31,10 +31,6 @@ const budgetSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'financialMangement'
     }],
-    category:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'categories'
-    }]
 },{timestamps:true})
 
 const budgetModel=mongoose.model('budget',budgetSchema)
