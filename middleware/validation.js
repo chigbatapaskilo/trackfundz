@@ -185,12 +185,13 @@ exports.expenseValidation=async(req,res,next)=>{
                 'number.greater': 'Amount must be greater than zero.',  
                 'any.required': 'Amount is required.'  
             }),  
-          description: joi.string()  
-            .optional()  
-            .messages({  
-                'string.base': 'Description must be a string if provided.'  
-            })  
-
+          description: joi.string().trim()  
+          .pattern(/^[a-zA-Z0-9\s]*$/, 'alphanumeric') 
+          .messages({  
+            'string.empty': 'Expense is required and cannot be empty.',  
+            'string.pattern.name': 'Expense must not contain special characters.',  
+            'any.required': 'Expense is required.'  
+        })
         })
         const {error}=expenseSchema.validate(req.body)
         if(error){

@@ -24,7 +24,7 @@ app.use('/api/v1', router);
 // app.use('/api/v1/category',cateRouter)
 app.use('/api/v1/expenses',expenseRoute)
 app.use('/api/v1/debt',debtRoute)
-app.use('api/v1/budget',budgetRoute)
+app.use('/api/v1/budget',budgetRoute)
 
 
 // Define the port

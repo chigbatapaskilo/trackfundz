@@ -16,7 +16,6 @@ exports.createBudget=async(req,res)=>{
             description,
             target,
             duration,
-            Status,
             targetRemaining:target,
             Trackuser:userId
         })
@@ -26,7 +25,8 @@ exports.createBudget=async(req,res)=>{
         await checkUser.save()
 
         res.status(201).json({
-        message:'new target set '
+        message:'new target set ',
+        data:setTarget
         })
     }catch(error) {
         res.status(500).json({
@@ -69,6 +69,8 @@ exports.saveForTarget=async(req,res)=>{
         const localMonth = date.getMonth() + 1; // Convert to 1-indexed  
         const localYear = date.getFullYear() 
         const fullDate=dayName+" "+ localMonth+"/"+ localYear
+        const findStatus=findBudget.Status
+      
         
         const data={
             datePaid:fullDate,
@@ -84,6 +86,39 @@ exports.saveForTarget=async(req,res)=>{
         res.status(500).json({
             message: 'An error occurred while processing your request.',
             errorMessage:error.message})
+    }
+}
+exports.updatestatus=async(req,res)=>{
+    try {
+        const {budgetId}=req.params
+        const {userId}=req.user
+        const findBudget=await budgetModel.findById(budgetId)
+        if(!findBudget){
+         return   res.status(400).json({
+                message:'budget not found'
+            })
+        }
+        if(findBudget.Trackuser.toString() !== userId.toString()){
+            return res.status(401).json({
+             message:'unable to update another users content'
+            })
+         }
+         if(findBudget.targetRemaining !== 0){
+            return res.status(400).json({
+                message:'target not achieved yet'
+            })
+         }
+
+        findBudget.Status="completed"
+        findBudget.save()
+        res.status(200).json({
+            message:'completed'
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: 'An error occurred while processing your request.',
+            errorMessage:error.message})  
     }
 }
 
