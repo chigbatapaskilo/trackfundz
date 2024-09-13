@@ -166,23 +166,6 @@ exports.createExpense = async (req, res) => {
     }  
 };  
 
-// exports.expenseHistoryForAcategory = async (req, res) => {  
-//     try { 
-//         const { userId} = req.user;  
-//         const { categoryId } = req.params;  
-//         const expenses = await ExpenseModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 }); 
-//         res.status(200).json({  
-//             message: 'Expense history retrieved successfully',  
-//             data: expenses  
-//         });  
-//     } catch (error) {  
-//         res.status(500).json({  
-//             message: 'An error occurred while fetching expense history.',  
-//             errorMessage: error.message  
-//         });  
-//     }  
-// };  
-
 exports.expenseHistory = async (req, res) => {  
     try {  
         const { userId} = req.user;  

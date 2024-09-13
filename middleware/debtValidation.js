@@ -5,7 +5,7 @@ exports.debtValidation=async(req,res,next)=>{
         target:joi.number()  
         .greater(0)  
         .required()  
-        .messages({  
+        .messages({   
             'number.base': 'Amount must be a number.',  
             'number.greater': 'Amount must be greater than zero.',  
             'any.required': 'Amount is required.'  

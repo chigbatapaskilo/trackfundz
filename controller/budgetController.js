@@ -121,23 +121,7 @@ exports.updatestatus=async(req,res)=>{
             errorMessage:error.message})  
     }
 }
-
-// exports.budgetHistoryForAcategory = async (req, res) => {  
-//     try { 
-//         const { userId} = req.user;  
-//         const { categoryId } = req.params;  
-//         const budget = await budgetModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 });
-//         res.status(200).json({  
-//             message: 'budget history retrieved successfully',  
-//             data: budget  
-//         });  
-//     } catch (error) {  
-//         res.status(500).json({  
-//             message: 'An error occurred while fetching budget history.',  
-//             errorMessage: error.message  
-//         });  
-//     }  
-// };  
+ 
 
 exports.budgetHistory = async (req, res) => {  
     try {  

@@ -36,12 +36,12 @@ exports.signUpTemplate=(verifyLink,firstName)=>{
             color: #333333;
         }
         .footer {
-            background: #333333;
+            background: #ffffff;
             padding: 10px;
             text-align: center;
             border-top: 1px solid #ddd;
             font-size: 0.9em;
-            color: #4d18dc;
+            color:#333333 ;
         }
         .button {
             display: inline-block;

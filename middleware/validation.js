@@ -17,7 +17,8 @@ exports.signUpValidation=async(req,res,next)=>{
         }),
         email: joi.string().email().required().pattern(/@(gmail\.com|yahoo\.com)$/).messages({  
             "any.required": "Please provide an email.",  
-            "string.email": "Please provide a valid email address.",  
+            "string.email": "Please provide a valid email address.",
+            "string.empty": "email name cannot be left empty.",  
             "string.pattern.base": "Email must end with @gmail.com or @yahoo.com."  
         }) ,
         phoneNumber:joi.string().required().regex(/^\d{11}$/).message('Phone number must be exactly 11 digits',),
@@ -47,7 +48,7 @@ exports.signUpValidation=async(req,res,next)=>{
         })  ,
         
         })
-        const {error}=signupvalidatorSChema.validate(req.body)
+        const {error}=signupvalidatorSChema.validate(req.body,{abortEarly:false})
         if(error){
             return res.status(400).json({errorMessage:error.details[0].message})
         }
@@ -56,7 +57,8 @@ exports.signUpValidation=async(req,res,next)=>{
 exports.loginvalidator=async(req,res,next)=>{
     const loginValidatorSchema=joi.object({
         email: joi.string().email().required().pattern(/@(gmail\.com|yahoo\.com)$/).messages({  
-            "any.required": "Please provide an email.",  
+            "any.required": "Please provide an email.", 
+            "string.empty": "email name cannot be left empty.", 
             "string.email": "Please provide a valid email address.",  
             "string.pattern.base": "Email must end with @gmail.com or @yahoo.com."  
         }),

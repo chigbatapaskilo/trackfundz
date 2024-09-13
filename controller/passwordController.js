@@ -26,7 +26,9 @@ exports.forgetPassword=async(req,res)=>{
         if(error instanceof Jwt.JsonWebTokenError){
             return res.status(error.message)
         }
-        res.status(500).json(error.message)
+        res.status(500).json({
+            message: 'An error occurred while processing your request.',
+            errorMessage:error.message})
     }
 }
 exports.resetPassword=async(req,res)=>{

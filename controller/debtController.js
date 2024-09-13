@@ -89,22 +89,7 @@ exports.payDebt=async(req,res)=>{
     }
 }
 
-// exports.DebtHistoryForAcategory = async (req, res) => {  
-//     try { 
-//         const { userId} = req.user;  
-//         const { categoryId } = req.params;  
-//         const debt = await debtModel.find({ category: categoryId,Trackuser:userId }).sort({ createdAt: -1 });;  
-//         res.status(200).json({  
-//             message: 'debt history retrieved successfully',  
-//             data: debt
-//         });  
-//     } catch (error) {  
-//         res.status(500).json({  
-//             message: 'An error occurred while fetching debt history.',  
-//             errorMessage: error.message  
-//         });  
-//     }  
-// };  
+
 
 exports.DebtHistory = async (req, res) => {  
     try {  
