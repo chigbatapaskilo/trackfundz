@@ -179,7 +179,6 @@ exports.expenseValidation=async(req,res,next)=>{
             }),
             description:joi.string().min(2).messages({
                 'string.min': 'Description must be at least 2 characters long.',
-                "string.empty": "Description cannot be left empty.", 
             }).optional()
         })
         const {error}=expenseSchema.validate(req.body,{abortEarly:true})
