@@ -15,7 +15,7 @@ exports.signUpValidation=async(req,res,next)=>{
             "string.min": "last name must be at least 3 characters long.",
             "string.pattern.base": "last name should only contain letters.",
         }),
-        email: joi.string().email().required().pattern(/@(gmail\.com|yahoo\.com)$/).messages({  
+        email: joi.string().email().trim().required().pattern(/@(gmail\.com|yahoo\.com)$/).messages({  
             "any.required": "Please provide an email.",  
             "string.email": "Please provide a valid email address.",
             "string.empty": "email name cannot be left empty.",  
@@ -63,17 +63,7 @@ exports.loginvalidator=async(req,res,next)=>{
             "string.pattern.base": "Email must end with @gmail.com or @yahoo.com."  
         }),
         password: joi.string()  
-        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,20}$/)  
-        .min(8)  
-        .max(20)  
-        .required()  
-        .messages({  
-            'string.empty': 'Password cannot be empty.',  
-            'string.pattern.base': 'Password must contain at least one uppercase letter, one lowercase letter, and one number.',  
-            'string.min': 'Password must be at least 8 characters long.',  
-            'string.max': 'Password must be at most 20 characters long.',  
-            'any.required': 'Password is required.'  
-        })  
+          
     })
     const {error}=loginValidatorSchema.validate(req.body)
     if(error){
@@ -186,16 +176,13 @@ exports.expenseValidation=async(req,res,next)=>{
                 'number.base': 'Amount must be a number.',  
                 'number.greater': 'Amount must be greater than zero.',  
                 'any.required': 'Amount is required.'  
-            }),  
-          description: joi.string().trim()  
-          .pattern(/^[a-zA-Z0-9\s]*$/, 'alphanumeric') 
-          .messages({  
-            'string.empty': 'Expense is required and cannot be empty.',  
-            'string.pattern.name': 'Expense must not contain special characters.',  
-            'any.required': 'Expense is required.'  
+            }),
+            description:joi.string().min(2).messages({
+                'string.min': 'Description must be at least 2 characters long.',
+                "string.empty": "Description cannot be left empty.", 
+            }).optional()
         })
-        })
-        const {error}=expenseSchema.validate(req.body)
+        const {error}=expenseSchema.validate(req.body,{abortEarly:true})
         if(error){
             return res.status(400).json({errorMessage:error.details[0].message})
         }

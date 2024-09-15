@@ -54,7 +54,7 @@ const userSchema=new mongoose.Schema({
         trim:true,
         default:0
     },
-    totalAmountReached:{
+    totalAmountSaved:{
         type:Number,
         trim:true,
         default:0

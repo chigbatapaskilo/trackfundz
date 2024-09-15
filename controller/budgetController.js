@@ -60,8 +60,8 @@ exports.saveForTarget=async(req,res)=>{
          }
         
         
-         const acheiveGoal=Number(checkUser.totalAmountReached)+Number(amount)
-         checkUser.totalAmountReached=acheiveGoal
+         const acheiveGoal=Number(checkUser.totalAmountSaved)+Number(amount)
+         checkUser.totalAmountSaved=acheiveGoal
          const BudgetGoal=Number(findBudget.targetRemaining)-Number(amount)
          const date=new Date
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];  
@@ -77,6 +77,9 @@ exports.saveForTarget=async(req,res)=>{
             amount,
             targetRemaining:BudgetGoal
         }
+        if(findBudget.targetRemaining == 0){
+            findBudget.Status="completed"
+          }
         const updateBudget=await budgetModel.findByIdAndUpdate(budgetId,data,{new:true})
         res.status(200).json({
             message:'update successfull',
