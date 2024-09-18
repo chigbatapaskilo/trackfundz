@@ -39,12 +39,20 @@ exports.payDebt=async(req,res)=>{
         
         const {debtId}=req.params
         const {amount}=req.body
-        const date=new Date
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];  
+        const date = new Date();
+        const days = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
         const dayName = days[date.getUTCDay()];
-        const localMonth = date.getMonth() + 1; // Convert to 1-indexed  
-        const localYear = date.getFullYear() 
-        const paymentDate=dayName + " " + localMonth + "/" + localYear;
+        const localMonth = date.getMonth() + 1; // Convert to 1-indexed
+        const localYear = date.getFullYear();
+        const paidDate = dayName + " " + localMonth + "/" + localYear;
         const {userId}=req.user
         
         const findDebt=await debtModel.findById(debtId)
@@ -74,7 +82,7 @@ exports.payDebt=async(req,res)=>{
          const percentagePaid=(debt)/(findDebt.debtOwed)*(100)
 
         const debtData={
-            datePaid:date,
+            datePaid:paidDate,
             debtPaid:debt,
             amount,
             debtRemaining:categoryDebtRemaining,
@@ -88,7 +96,7 @@ exports.payDebt=async(req,res)=>{
           }
           await targetModel.create({
             amount,
-            date: date,
+            date: paidDate,
             debts: debtId,
             paidDebt: debt
         });
