@@ -19,7 +19,7 @@ datePaid:{
 },
 Trackuser:[{
     type:mongoose.Schema.Types.ObjectId,
-    ref:'financialMangement'
+    ref:'users'
 }]
 },{timestamps:true})
 

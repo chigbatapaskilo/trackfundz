@@ -1,6 +1,6 @@
 const debtModel=require('../model/loanModel');
 const userModel=require('../model/userModel')
-
+const targetModel=require('../model/target')
 exports.createdebt=async(req,res)=>{
     try {
         const {userId}=req.user
@@ -44,7 +44,7 @@ exports.payDebt=async(req,res)=>{
         const dayName = days[date.getUTCDay()];
         const localMonth = date.getMonth() + 1; // Convert to 1-indexed  
         const localYear = date.getFullYear() 
-        const fullDate=dayName+" "+ localMonth+"/"+ localYear
+        const paymentDate=dayName + " " + localMonth + "/" + localYear;
         const {userId}=req.user
         
         const findDebt=await debtModel.findById(debtId)
@@ -69,20 +69,30 @@ exports.payDebt=async(req,res)=>{
          const acheiveGoal=Number(checkUser.totaldebtPaid)+Number(amount)
          checkUser.totaldebtPaid=acheiveGoal
          const categoryDebtRemaining=Number(findDebt.debtRemaining)-Number(amount)
-         const percentagePaid=(amountPaid)/(findDebt.debtOwed)*(100)
+         const debt=Number(findDebt.debtPaid)+Number(amount)
+
+         const percentagePaid=(debt)/(findDebt.debtOwed)*(100)
 
         const debtData={
-            datePaid:fullDate,
-            amountPaid,
+            datePaid:date,
+            debtPaid:debt,
             amount,
             debtRemaining:categoryDebtRemaining,
-            percentage:percentagePaid
+            percentage:percentagePaid,
+            
         }
         if(findDebt.debtRemaining== 0){
             
             data.Status="completed"
             findDebt.Status=data.Status
           }
+          await targetModel.create({
+            amount,
+            date: date,
+            debts: debtId,
+            paidDebt: debt
+        });
+    
 
         const updateDebtPayment=await debtModel.findByIdAndUpdate(debtId, debtData,{new:true})
         await checkUser.save()

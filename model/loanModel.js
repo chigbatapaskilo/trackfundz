@@ -15,7 +15,7 @@ const budgetSchema=new mongoose.Schema({
     amount:{
         type:Number
     },
-    amountPaid:{
+    debtPaid:{
         type:Number,
         default:0
     },
@@ -37,9 +37,9 @@ const budgetSchema=new mongoose.Schema({
     },
     Trackuser:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'financialMangement'
+        ref:'users'
     }],
 },{timestamps:true})
 
-const debtModel=mongoose.model('debtManager',budgetSchema)
+const debtModel=mongoose.model('debt',budgetSchema)
 module.exports=debtModel

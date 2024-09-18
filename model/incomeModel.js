@@ -13,7 +13,7 @@ paymentName:{
 },
 Trackuser:[{
     type:mongoose.Schema.Types.ObjectId,
-    ref:'financialMangement'
+    ref:'users'
 }]
 },{timestamps:true})
 const IncomeModel=mongoose.model('income',incomeSchema)

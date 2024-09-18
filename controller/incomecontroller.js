@@ -30,7 +30,7 @@ exports.createIncome = async (req, res) => {
         const addIncome = new IncomeModel({  
             income,  
             paymentName,  
-           
+        //    Trackuser:userId
         }); 
         
         await addIncome.save();  
