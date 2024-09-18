@@ -182,7 +182,7 @@ try {
 }
 exports.getOne=async(req,res)=>{
     try {
-        const {userId}=req.params
+        const {userId}=req.body
         const user=await userModel.findById(userId)
         if(!user){
             return res.status(404).json({message:`user with the id:${userId} does not exist`})

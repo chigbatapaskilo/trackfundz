@@ -14,7 +14,7 @@ router.post('/forgetpassword',forgetPassword)
 router.post('/verifyPassword/:passwordToken',forgetPasswordValidation,resetPassword)
 router.post('/changePassword',changePasswordValidation,changePassword)
 router.post('/makeadmin/:userId',makeAdmin)
-router.get('/oneuser/:userId',getOne)
+router.get('/oneuser',getOne)
 router.get('/alluseruserId/:',authorize,isAdmin,getAll)
 router.put('/update/:userId',upload.single('profilePicture'),updateValidation,updateuserdetails)
 module.exports=router
