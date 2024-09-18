@@ -8,7 +8,7 @@ const upload=require('../utils/multer');
 router.post('/signup',signUpValidation,signUp)
 router.post('/login',loginvalidator,login)
 
-router.get('/verification/:token',verifyEmail)
+router.patch('/verification/:token',verifyEmail)
 router.post('/reverify',resendVerification)
 router.post('/forgetpassword',forgetPassword)
 router.post('/verifyPassword/:passwordToken',forgetPasswordValidation,resetPassword)

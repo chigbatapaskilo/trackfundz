@@ -69,12 +69,20 @@ exports.payDebt=async(req,res)=>{
          const acheiveGoal=Number(checkUser.totaldebtPaid)+Number(amount)
          checkUser.totaldebtPaid=acheiveGoal
          const categoryDebtRemaining=Number(findDebt.debtRemaining)-Number(amount)
+         const percentagePaid=(amountPaid)/(findDebt.debtOwed)*(100)
 
         const debtData={
             datePaid:fullDate,
-            amountPaid:amount,
-            debtRemaining:categoryDebtRemaining
+            amountPaid,
+            amount,
+            debtRemaining:categoryDebtRemaining,
+            percentage:percentagePaid
         }
+        if(findDebt.debtRemaining== 0){
+            
+            data.Status="completed"
+            findDebt.Status=data.Status
+          }
 
         const updateDebtPayment=await debtModel.findByIdAndUpdate(debtId, debtData,{new:true})
         await checkUser.save()

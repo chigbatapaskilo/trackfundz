@@ -1,4 +1,5 @@
 const joi = require('@hapi/joi');
+// const { description } = require('@hapi/joi/lib/base');
 
 exports.signUpValidation=async(req,res,next)=>{
     
@@ -154,38 +155,4 @@ exports.updateValidation=async(req,res,next)=>{
             return res.status(400).json({errorMessage:error.details[0].message})
         }
         next()
-}
-exports.expenseValidation=async(req,res,next)=>{
-
-
-        const expenseSchema=joi.object({
-            expense: joi.string()  
-            .trim()  
-            .pattern(/^[a-zA-Z0-9\s]*$/, 'alphanumeric') // Allow letters, numbers, and spaces only  
-            .min(1)  
-            .required()  
-            .messages({  
-                'string.empty': 'Expense is required and cannot be empty.',  
-                'string.pattern.name': 'Expense must not contain special characters.',  
-                'any.required': 'Expense is required.'  
-            }),  
-           amount: joi.number()  
-            .greater(0)  
-            .required()  
-            .messages({  
-                'number.base': 'Amount must be a number.',  
-                'number.greater': 'Amount must be greater than zero.',  
-                'any.required': 'Amount is required.'  
-            }),
-            description:joi.string().min(2).messages({
-                'string.min': 'Description must be at least 2 characters long.',
-            }).optional()
-        })
-        const {error}=expenseSchema.validate(req.body,{abortEarly:true})
-        if(error){
-            return res.status(400).json({errorMessage:error.details[0].message})
-        }
-        next()  
-     
-   
 }

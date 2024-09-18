@@ -2,7 +2,7 @@ const joi=require('@hapi/joi')
 
 exports.debtValidation=async(req,res,next)=>{
     const debtValidationSchema=joi.object({
-        target:joi.number()  
+        debtOwed:joi.number()  
         .greater(0)  
         .required()  
         .messages({   

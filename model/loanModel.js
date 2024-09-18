@@ -12,12 +12,20 @@ const budgetSchema=new mongoose.Schema({
     duration:{
         type:String
     },
-    amountPaid:{
+    amount:{
         type:Number
+    },
+    amountPaid:{
+        type:Number,
+        default:0
     },
     debtRemaining:{
         type:Number,
        
+    },
+    percentage:{
+       type:Number,
+       default:0
     },
     Status:{
         type:String,

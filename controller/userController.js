@@ -45,7 +45,7 @@ exports.signUp=async(req,res)=>{
         })
 
          const token=Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"1hr"})
-         const verifyLink=`https://trackfundz-wmhv.onrender.com/api/v1/verification/${token}`
+         const verifyLink=`https://trak-fundz.vercel.app/#/verifySuccessful/${token}`
          
          const mailOption={
                 email:user.email,
@@ -92,7 +92,10 @@ exports.verifyEmail=async(req,res)=>{
         
     } catch (error) {
         if(error instanceof Jwt.JsonWebTokenError){
-            return res.status(400).json(error.message)
+            return res.status(400).json({
+                message:'link expired',
+                errorMessage:error.message
+            })
             }
         res.status(500).json({
             message: 'An error occurred while processing your request.',
@@ -111,7 +114,7 @@ exports.resendVerification=async(req,res)=>{
             return res.status(400).json({ message: 'Your email is already verified. No need to resend the verification link.' })
             }
         const token=Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:'1hr'})
-        const verifyLink=`https://trackfundz-wmhv.onrender.com/api/v1/verification/${token}`
+        const verifyLink=`https://trak-fundz.vercel.app/#/verifySuccessful/${token}`
         const mailOption={
             email:user.email,
             subject:`reverification email`,
@@ -232,6 +235,7 @@ exports.updateuserdetails=async(req,res)=>{
             await cloudinary.uploader.destroy(user.profilePicture);
             // Update category image URL
             user.profilePicture = image.secure_url;
+            data.profilePicture=image.secure_url
           }
        
          

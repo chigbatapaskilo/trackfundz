@@ -59,7 +59,7 @@ exports.saveForTarget=async(req,res)=>{
             })
          }
         
-        
+        const savingsForBudget=Number(findBudget.targetReached)+Number(amount)
          const acheiveGoal=Number(checkUser.totalAmountSaved)+Number(amount)
          checkUser.totalAmountSaved=acheiveGoal
          const BudgetGoal=Number(findBudget.targetRemaining)-Number(amount)
@@ -69,21 +69,29 @@ exports.saveForTarget=async(req,res)=>{
         const localMonth = date.getMonth() + 1; // Convert to 1-indexed  
         const localYear = date.getFullYear() 
         const fullDate=dayName+" "+ localMonth+"/"+ localYear
-        const findStatus=findBudget.Status
-      
+        const percentagePaid=(savingsForBudget)/(findBudget.target)*(100)
         
+      
+       
+        console.log(percentagePaid)
         const data={
             datePaid:fullDate,
             amount,
+            targetReached:savingsForBudget,
+            percentage:percentagePaid,
             targetRemaining:BudgetGoal
         }
         if(findBudget.targetRemaining == 0){
-            findBudget.Status="completed"
-          }
+            
+           data.Status="completed"
+           findBudget.Status=data.Status
+         }
+      
         const updateBudget=await budgetModel.findByIdAndUpdate(budgetId,data,{new:true})
         res.status(200).json({
             message:'update successfull',
-            updateBudget
+            
+            data:updateBudget
         })
     } catch (error) {
         res.status(500).json({

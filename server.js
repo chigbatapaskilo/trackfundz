@@ -1,6 +1,7 @@
 // Import necessary modules and configurations
 const express = require('express');
 const cors = require('cors');
+const keepServerAlive=require('./keepSeverAlive')
 const router = require('./router/userRouter');
 
 const expenseRoute = require('./router/expenseRouter');
@@ -37,6 +38,12 @@ app.get("/",(req,res)=>{
         message:"WELCOME TO TRACKFUND"
     })
 })
+keepServerAlive();
+
+
+app.get('/1', (req, res) => {
+    res.send('Server is alive!');
+});
 app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`);
 });

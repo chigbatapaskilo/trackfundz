@@ -15,6 +15,10 @@ const budgetSchema=new mongoose.Schema({
     amount:{
         type:Number
     },
+    targetReached:{
+        type:Number,
+        default:0
+    },
     targetRemaining:{
         type:Number,
          
@@ -26,6 +30,10 @@ const budgetSchema=new mongoose.Schema({
         type:String,
         enum:['inprogress','completed'],
         default:'inprogress'
+    },
+    percentage:{
+        type:String,
+        default:0
     },
     Trackuser:[{
         type:mongoose.Schema.Types.ObjectId,
