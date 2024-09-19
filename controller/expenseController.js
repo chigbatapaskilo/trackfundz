@@ -128,7 +128,7 @@ exports.createExpense = async (req, res) => {
                 message: 'Invalid amount. Amount must be a positive value'  
             });  
         }  
-        if (amount > checkUser.availableBalance) {  
+        if (Number(amount )> Number(checkUser.availableBalance)) {  
             return res.status(400).json({  
                 message: 'Cannot add expense. Insufficient balance. Please add income'  
             });  
