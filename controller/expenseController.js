@@ -123,12 +123,14 @@ exports.createExpense = async (req, res) => {
         
           
         const { expense, amount, description } = req.body;  
-       if (amount <= 0) {  
+        const amountValue = Number(amount);  
+       if (isNaN(amountValue) || amountValue <= 0){  
             return res.status(400).json({  
                 message: 'Invalid amount. Amount must be a positive value'  
             });  
         }  
-        if (Number(amount )> Number(checkUser.availableBalance)) {  
+        const availableBalance = Number(checkUser.availableBalance) || 0; 
+        if (amountValue > availableBalance) {  
             return res.status(400).json({  
                 message: 'Cannot add expense. Insufficient balance. Please add income'  
             });  
@@ -140,7 +142,7 @@ exports.createExpense = async (req, res) => {
        checkUser.totalExpenses=expenseTotal
         const expenseMade = new ExpenseModel({  
             expense,  
-            amount,  
+            amount: amountValue,
             description, 
             datePaid:fullDate, 
             Trackuser:userId
