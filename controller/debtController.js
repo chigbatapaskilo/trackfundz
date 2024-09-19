@@ -39,20 +39,39 @@ exports.payDebt=async(req,res)=>{
         
         const {debtId}=req.params
         const {amount}=req.body
-        const date = new Date();
-        const days = [
-          "Sunday",
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ];
-        const dayName = days[date.getUTCDay()];
-        const localMonth = date.getMonth() + 1; // Convert to 1-indexed
-        const localYear = date.getFullYear();
-        const paidDate = dayName + " " + localMonth + "/" + localYear;
+        const date = new Date();  
+const days = [  
+  "Sunday",  
+  "Monday",  
+  "Tuesday",  
+  "Wednesday",  
+  "Thursday",  
+  "Friday",  
+  "Saturday",  
+];  
+const dayName = days[date.getUTCDay()];  
+const localMonth = String(date.getMonth() + 1).padStart(2, '0'); // Zero-padded month  
+const localYear = date.getFullYear();  
+
+// Creating a more standard format  
+const paidDateString = `${dayName} ${localMonth}/${localYear}`;  
+
+// If you want to create a Date object for this specific date  
+const paidDate = new Date(`${localYear}-${localMonth}-01T00:00:00Z`); // Example date, using the first of the month
+        // const date = new Date();
+        // const days = [
+        //   "Sunday",
+        //   "Monday",
+        //   "Tuesday",
+        //   "Wednesday",
+        //   "Thursday",
+        //   "Friday",
+        //   "Saturday",
+        // ];
+        // const dayName = days[date.getUTCDay()];
+        // const localMonth = date.getMonth() + 1; // Convert to 1-indexed
+        // const localYear = date.getFullYear();
+        // const paidDate = dayName + localMonth + "/" + localYear;
         const {userId}=req.user
         
         const findDebt=await debtModel.findById(debtId)
@@ -82,7 +101,7 @@ exports.payDebt=async(req,res)=>{
          const percentagePaid=(debt)/(findDebt.debtOwed)*(100)
 
         const debtData={
-            datePaid:paidDate,
+            date:paidDateString ,
             debtPaid:debt,
             amount,
             debtRemaining:categoryDebtRemaining,
@@ -96,7 +115,7 @@ exports.payDebt=async(req,res)=>{
           }
           await targetModel.create({
             amount,
-            date: paidDate,
+            date: paidDateString ,
             debts: debtId,
             paidDebt: debt
         });

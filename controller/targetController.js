@@ -1,7 +1,7 @@
 const targetModel=require('../model/target')
 const budgetModel=require('../model/budgetModel')
 
-exports.findTarget=async(req,res)=>{
+exports.findBudgetHistory=async(req,res)=>{
     try {
        const {budgetId}=req.params 
        const getTarget=await targetModel.find({budgets:budgetId});
@@ -14,7 +14,7 @@ exports.findTarget=async(req,res)=>{
             errorMessage:error.message})
     }
 }
-exports.findTarget=async(req,res)=>{
+exports.finddebtHistory=async(req,res)=>{
     try {
        const {debtId}=req.params 
        const getdebtPaid=await targetModel.find({debts:debtId});

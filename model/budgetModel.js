@@ -22,7 +22,7 @@ const budgetSchema = new mongoose.Schema(
     targetRemaining: {
       type: Number,
     },
-    datePaid: {
+    date: {
       type: String,
     },
     Status: {
