@@ -99,7 +99,7 @@ exports.saveForTarget = async (req, res) => {
       percentage: roundPercentage,
       targetRemaining: BudgetGoal,
     };
-    if (findBudget.targetRemaining == 0) {
+    if (findBudget.targetRemaining <= 0) {
       data.Status = "completed";
       findBudget.Status = data.Status;
     }
