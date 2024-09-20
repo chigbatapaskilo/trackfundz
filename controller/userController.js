@@ -217,7 +217,7 @@ exports.updateuserdetails=async(req,res)=>{
         const {userId}=req.params
         const {phoneNumber,firstName,lastName}=req.body
         const user=await userModel.findById(userId)
-        const file=req.file.profilePicture
+        const file=req.file.path 
         if(!user){
             return res.status(404).json('user not found.')
         }
@@ -230,12 +230,26 @@ exports.updateuserdetails=async(req,res)=>{
         }
         if (file) {
             // Upload new image to Cloudinary
-            const image = await cloudinary.uploader.upload(file.tempFilePath);
+            const image = await cloudinary.uploader.upload(file);
+            
             // Delete previous image from Cloudinary
-            await cloudinary.uploader.destroy(user.profilePicture);
+             // Check if there is an existing profilePicture and delete it from Cloudinary  
+        if (user.profilePicture) {  
+            await cloudinary.uploader.destroy(user.profilePicture);  
+
+        } 
             // Update category image URL
-            user.profilePicture = image.secure_url;
+            // user.profilePicture = image.secure_url;
             data.profilePicture=image.secure_url
+
+            fs.unlink(file, (err) => {  
+                if (err) {  
+                    console.error(`Failed to delete local file: ${err}`);  
+                } else {  
+                    console.log(`Local file deleted: ${file}`);  
+                }  
+            });  
+        
           }
        
          

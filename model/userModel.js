@@ -38,7 +38,8 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     profilePicture: {
-      profileUrl: { type: String },
+      type: String, // Changed to store the URL directly  
+      // default: '', // Optional: set a default value  
     },
     availableBalance: {
       type: Number,

@@ -25,7 +25,7 @@ exports.signUpTemplate=(verifyLink,firstName)=>{
             background-color: #f4f4f4; /* Light grey background */
         }
         .header {
-            background: #4d18dc;
+            background: #6404e0;
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ddd;
@@ -36,12 +36,12 @@ exports.signUpTemplate=(verifyLink,firstName)=>{
             color: #333333;
         }
         .footer {
-            background: #ffffff;
+            background: #6404e0;
             padding: 10px;
             text-align: center;
             border-top: 1px solid #ddd;
             font-size: 0.9em;
-            color:#333333 ;
+            color:#ffffff;
         }
         .button {
             display: inline-block;
@@ -104,7 +104,7 @@ exports.reSendverificationTemplate = (verifyLink, firstName) => {
             background-color: #f4f4f4; /* Light grey background */
         }
         .header {
-            background: #333333;
+            background:  #6404e0;
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ddd;
@@ -115,17 +115,17 @@ exports.reSendverificationTemplate = (verifyLink, firstName) => {
             color: #333333;
         }
         .footer {
-            background: #333333;
+            background: #6404e0;
             padding: 10px;
             text-align: center;
             border-top: 1px solid #ddd;
             font-size: 0.9em;
-            color: #cccccc;
+            color:  #ffffff;
         }
         .button {
             display: inline-block;
             background-color: #000000;
-            color: #ffffff;
+            color:  #6404e0;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
@@ -135,7 +135,7 @@ exports.reSendverificationTemplate = (verifyLink, firstName) => {
 <body>
     <div class="container">
         <div class="header">
-            <h1>Verification Email</h1>
+            <h1>Welcome to trackfundz !<</h1>
         </div>
         <div class="content">
             <p>Hello ${firstName},</p>
@@ -182,28 +182,28 @@ exports.forgetPasswordtemplate = (verifyLink, firstName) => {
             background-color: #f4f4f4; /* Light grey background */
         }
         .header {
-            background: #333333;
+            background: #6404e0;
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ddd;
-            color: #ffffff;
+            color: #6404e0;
         }
         .content {
             padding: 20px;
             color: #333333;
         }
         .footer {
-            background: #333333;
+            background:#6404e0;
             padding: 10px;
             text-align: center;
             border-top: 1px solid #ddd;
             font-size: 0.9em;
-            color: #cccccc;
+            color: #ffffff;
         }
         .button {
             display: inline-block;
             background-color: #000000;
-            color: #ffffff;
+            color: #6404e0;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
@@ -236,3 +236,5 @@ exports.forgetPasswordtemplate = (verifyLink, firstName) => {
 }
 
 
+
+    
