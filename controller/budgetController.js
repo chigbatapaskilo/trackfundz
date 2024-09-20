@@ -68,7 +68,9 @@ exports.saveForTarget = async (req, res) => {
    const totalSavings=Number(checkUser.totalAmountSaved) + Number(amount);
   
    checkUser.totalAmountSaved=totalSavings
-    
+   
+
+  
     const BudgetGoal = Number(findBudget.targetRemaining) - Number(amount);
     const date = new Date();
     const days = [
@@ -111,6 +113,7 @@ exports.saveForTarget = async (req, res) => {
     const updateBudget = await budgetModel.findByIdAndUpdate(budgetId, data, {
       new: true,
     });
+    await checkUser.save()
     res.status(200).json({
       message: "update successfull",
 
