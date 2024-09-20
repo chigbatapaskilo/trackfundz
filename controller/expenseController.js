@@ -171,7 +171,9 @@ exports.createExpense = async (req, res) => {
 exports.expenseHistory = async (req, res) => {  
     try {  
         const { userId} = req.user;  
-        const expenses = await ExpenseModel.find({Trackuser:userId});  
+            const expenses = await ExpenseModel.find({ Trackuser: userId }).sort({ createdAt: 1 });  
+       
+       // const expenses = await ExpenseModel.find({Trackuser:userId}).createdAt;  
         res.status(200).json({  
             message: 'Expense history retrieved successfully',  
             data: expenses  

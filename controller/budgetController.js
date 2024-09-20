@@ -88,10 +88,6 @@ exports.saveForTarget = async (req, res) => {
     const fullDate = dayName + " " + localMonth + "/" + localYear;
     const percentagePaid = (savingsForBudget / findBudget.target) * 100;
     const roundPercentage=Math.floor(percentagePaid)
-    console.log(roundPercentage);
-    
-
-    
     const data = {
       datePaid: fullDate,
       amount,
@@ -99,21 +95,23 @@ exports.saveForTarget = async (req, res) => {
       percentage: roundPercentage,
       targetRemaining: BudgetGoal,
     };
-    if (findBudget.targetRemaining <= 0) {
-      data.Status = "completed";
-      findBudget.Status = data.Status;
-    }
+ 
     await targetModel.create({
         amount,
         date: fullDate,
         budgets: budgetId,
-        totalAmount: savingsForBudget
+        totalAmount: savingsForBudget,
+        budget:findBudget.description,
+        Trackuser:userId
     });
+    await checkUser.save()
 
     const updateBudget = await budgetModel.findByIdAndUpdate(budgetId, data, {
       new: true,
     });
-    await checkUser.save()
+   
+    
+    
     res.status(200).json({
       message: "update successfull",
 

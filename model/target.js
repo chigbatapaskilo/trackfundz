@@ -7,6 +7,10 @@ const targetSchema=new mongoose.Schema({
     date:{
         type:String
     },
+    budget:{
+        type:String
+      
+    },
     budgets:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "budget",
@@ -20,7 +24,11 @@ const targetSchema=new mongoose.Schema({
     },
     debtPaid: {
         type: Number
-    }
+    },
+    Trackuser:[{
+       type:mongoose.Schema.Types.ObjectId,
+    ref:'users'
+    }]
 })
 const targetModel =mongoose.model("target",targetSchema)
 

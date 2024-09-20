@@ -27,3 +27,12 @@ exports.finddebtHistory=async(req,res)=>{
             errorMessage:error.message})
     }
 }
+exports.dashBoardHistory=async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        res.status(500).json({
+            message: 'An error occurred while processing your request.',
+            errorMessage:error.message})
+    }
+}
