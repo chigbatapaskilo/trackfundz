@@ -1,6 +1,7 @@
 const debtModel=require('../model/loanModel');
 const userModel=require('../model/userModel')
-const targetModel=require('../model/target')
+const targetModel=require('../model/target');
+const { describe } = require('@hapi/joi/lib/base');
 exports.createdebt=async(req,res)=>{
     try {
         const {userId}=req.user
@@ -117,15 +118,15 @@ const paidDate = new Date(`${localYear}-${localMonth}-01T00:00:00Z`); // Example
             amount,
             debtRemaining:categoryDebtRemaining,
             percentage: roundPercentage,
-            
-        }
+            }
      
           await targetModel.create({
             amount,
             date: paidDateString ,
             debts: debtId,
             paidDebt: debtRepaid,
-            debt:findDebt.description
+            debt:findDebt.description,
+            Trackuser:userId
         });
      
     

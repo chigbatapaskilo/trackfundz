@@ -1,5 +1,6 @@
 const targetModel=require('../model/target')
-const budgetModel=require('../model/budgetModel')
+const budgetModel=require('../model/budgetModel');
+const { description } = require('@hapi/joi/lib/base');
 
 exports.findBudgetHistory=async(req,res)=>{
     try {
@@ -61,7 +62,8 @@ exports.findFullPaymentHistory = async (req, res) => {
         const filteredDebtHistory = debtHistory.map(entry => ({  
             date: entry.date, // Assuming 'date' is directly part of the entry  
             amount: entry.amount, 
-            debt:entry.debt,  
+            debt:entry.debt,
+            
         }));  
 
         // Sending the filtered result in the response  
