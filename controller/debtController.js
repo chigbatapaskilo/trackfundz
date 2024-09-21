@@ -97,10 +97,19 @@ const paidDate = new Date(`${localYear}-${localMonth}-01T00:00:00Z`); // Example
          checkUser.totaldebtPaid=acheiveGoal
          const categoryDebtRemaining=Number(findDebt.debtRemaining)-Number(amount)
          const debtRepaid=Number(findDebt.debtPaid)+Number(amount)
+         if(debtRepaid >Number(findDebt.debtOwed)){
+            return res.status(400).json({  
+                message: `Error: The amount you are about to pay exceeds your debt owed, your balance to pay up your debt  is ${findDebt.debtRemaining}` 
+            });
+         }
 
          const percentagePaid=(debtRepaid)/(findDebt.debtOwed)*(100)
          const roundPercentage=Math.floor(percentagePaid)
-
+         if (percentagePaid > 100) {  
+            return res.status(400).json({  
+                message: "Error: The percentage cannot exceed 100."  
+            });  
+        } 
      
          const debtData={
             date:paidDateString ,

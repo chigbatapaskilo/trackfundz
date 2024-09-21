@@ -61,17 +61,16 @@ exports.saveForTarget = async (req, res) => {
         message: "unable to update another users content",
       });
     }
-
-    
-
-    const savingsForBudget = Number(findBudget.targetReached) + Number(amount);
+   const savingsForBudget = Number(findBudget.targetReached) + Number(amount);
    const totalSavings=Number(checkUser.totalAmountSaved) + Number(amount);
-  
    checkUser.totalAmountSaved=totalSavings
+   const BudgetGoal = Number(findBudget.targetRemaining) - Number(amount);
+   if (savingsForBudget > Number(findBudget.target)) {  
+    return res.status(400).json({  
+        message: `Error: The budget paid cannot exceed the total budget target, your balance to complete target  is ${findBudget.targetRemaining}` 
+    });  
+} 
    
-
-  
-    const BudgetGoal = Number(findBudget.targetRemaining) - Number(amount);
     const date = new Date();
     const days = [
       "Sunday",
@@ -87,6 +86,11 @@ exports.saveForTarget = async (req, res) => {
     const localYear = date.getFullYear();
     const fullDate = dayName + " " + localMonth + "/" + localYear;
     const percentagePaid = (savingsForBudget / findBudget.target) * 100;
+    if (percentagePaid > 100) {  
+      return res.status(400).json({  
+          message: "Error: The percentage cannot exceed 100."  
+      });  
+  }  
     const roundPercentage=Math.floor(percentagePaid)
     const data = {
       datePaid: fullDate,
