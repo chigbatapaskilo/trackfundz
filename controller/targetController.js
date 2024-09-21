@@ -33,10 +33,8 @@ exports.dashBoardHistory=async(req,res)=>{
         const budgetHistory=await targetModel.find({Trackuser:userId}).populate('budgets').sort({ date:-1 });
         const filteredHistory = budgetHistory.map(entry => ({  
             date: entry.date, // Assuming `date` is directly part of the entry  
-            amount: entry.amount,  
-            budgets: entry.budgets.map(budget => ({  
-                description: budget.description,  
-            }))  
+            amount: entry.amount,
+            budget:entry.budget,  
         }));  
 
         // Sending the filtered result in the response  
@@ -63,11 +61,7 @@ exports.findFullPaymentHistory = async (req, res) => {
         const filteredDebtHistory = debtHistory.map(entry => ({  
             date: entry.date, // Assuming 'date' is directly part of the entry  
             amount: entry.amount, 
-            debt:entry.debt, 
-            debts: entry.debts.map(debtp=> ({  
-                description: debtp.description,  // replace with actual property if different  
-                 
-            }))  
+            debt:entry.debt,  
         }));  
 
         // Sending the filtered result in the response  
