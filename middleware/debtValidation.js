@@ -8,7 +8,7 @@ exports.debtValidation=async(req,res,next)=>{
         .messages({   
             'number.base': 'Amount must be a number.',  
             'number.greater': 'Amount must be greater than zero.', 
-            "number.empty": "target cannot be left empty.", 
+            "number.empty": "amount cannot be left empty.", 
             'any.required': 'Amount is required.'  
         }),
         duration: joi.string().regex(/^\d+ (weeks|days|months)$/).required().messages({

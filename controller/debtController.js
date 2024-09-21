@@ -96,29 +96,29 @@ const paidDate = new Date(`${localYear}-${localMonth}-01T00:00:00Z`); // Example
          const acheiveGoal=Number(checkUser.totaldebtPaid)+Number(amount)
          checkUser.totaldebtPaid=acheiveGoal
          const categoryDebtRemaining=Number(findDebt.debtRemaining)-Number(amount)
-         const debt=Number(findDebt.debtPaid)+Number(amount)
+         const debtRepaid=Number(findDebt.debtPaid)+Number(amount)
 
-         const percentagePaid=(debt)/(findDebt.debtOwed)*(100)
+         const percentagePaid=(debtRepaid)/(findDebt.debtOwed)*(100)
+         const roundPercentage=Math.floor(percentagePaid)
 
-        const debtData={
+     
+         const debtData={
             date:paidDateString ,
-            debtPaid:debt,
+            debtPaid:debtRepaid,
             amount,
             debtRemaining:categoryDebtRemaining,
-            percentage:percentagePaid,
+            percentage: roundPercentage,
             
         }
-        if(findDebt.debtRemaining== 0){
-            
-            data.Status="completed"
-            findDebt.Status=data.Status
-          }
+     
           await targetModel.create({
             amount,
             date: paidDateString ,
             debts: debtId,
-            paidDebt: debt
+            paidDebt: debtRepaid,
+            debt:findDebt.description
         });
+    
     
 
         const updateDebtPayment=await debtModel.findByIdAndUpdate(debtId, debtData,{new:true})

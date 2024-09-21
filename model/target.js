@@ -11,6 +11,10 @@ const targetSchema=new mongoose.Schema({
         type:String
       
     },
+    debt:{
+        type:String
+      
+    },
     budgets:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "budget",

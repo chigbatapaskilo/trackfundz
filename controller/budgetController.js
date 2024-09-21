@@ -161,7 +161,7 @@ exports.updatestatus = async (req, res) => {
 exports.budgetHistory = async (req, res) => {
   try {
     const { userId } = req.user;
-    const budget = await budgetModel.find({ Trackuser: userId });
+    const budget = await budgetModel.find({ Trackuser: userId }).sort({ createdAt: 1 });
     res.status(200).json({
       message: "budget history retrieved successfully",
       data: budget,

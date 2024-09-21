@@ -6,6 +6,7 @@ const userModel=require('../model/userModel')
 const cloudinary=require('../config/cloudinary')
 require('dotenv').config()
 const fs=require('fs');
+const { description } = require('@hapi/joi/lib/base');
 
 
 
@@ -183,12 +184,58 @@ try {
 exports.getOne=async(req,res)=>{
     try {
         const {userId}=req.params
-        const user=await userModel.findById(userId)
+        const user=await userModel.findById(userId).populate('expenseTracker').populate('budgetPlanner').populate('debtManager').sort({ date: -1 })
         if(!user){
             return res.status(404).json({message:`user with the id:${userId} does not exist`})
         }
+         // Get the top 3 recent transactions from expenseTracker  
+     const recentTransactions = user.expenseTracker  
+     .sort((a, b) => new Date(b.datePaid) - new Date(a.datePaid)) // Sort by datePaid descending  
+     .slice(0, 3); // Get the top 3 recent transactions  
+
+      // Get the top 3 recent budgets from budgetPlanner  
+    const recentBudgets = user.budgetPlanner  
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt descending  
+    .slice(0, 3); // Get the top 3 recent budgets  
+
+    // Get the top 3 recent debts from debtManager  
+    const recentDebts = user.debtManager  
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort by createdAt descending  
+    .slice(0, 3); // Get the top 3 recent debts  
+        const filteredHistory = {  
+           _id: user. _id,
+        firstName: user.firstName,
+        lastName:user.lastName,
+        email: user. email,
+        isVerified: user.isVerified,
+        isAdmin:user.isAdmin,
+        availableBalance: user.availableBalance,
+        totalExpenses: user.totalExpenses,
+        totalTargetGoal: user.totalTargetGoal,
+        totalAmountSaved: user.totalAmountSaved,
+        totalDebtAmount: user.totalDebtAmount,
+        totaldebtPaid:user.totaldebtPaid,
+        budgetPlanner: recentBudgets.map(budget => ({  
+                description: budget.description,
+                target:budget.target,
+                duration:budget.duration,
+                createdAt:budget.createdAt
+            })) ,
+        expenseTracker:recentTransactions.map(expenses=>({
+            description:expenses. description,
+            expense:expenses.  expense,
+             amount:expenses. amount,
+             datePaid:expenses.datePaid
+        })),
+        debtManager:recentDebts.map(entry=>({
+            description: entry.description, 
+            debtOwed: entry.debtOwed,
+            duration:entry.duration,
+            createdAt:entry.createdAt
+        }))
+        }
         res.status(200).json({message: `Welcome to Trakfundz, ${user.firstName}! You can track your loans, debt balances, and repayment schedules all in one place. Take control of your finances and start building a debt-free future today!`,  
-        data: user  })
+        data: filteredHistory  })
         
     } catch (error) {
         res.status(500).json({
