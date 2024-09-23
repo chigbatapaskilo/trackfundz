@@ -38,8 +38,8 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     profilePicture: {
-      type: String, // Changed to store the URL directly  
-      // default: '', // Optional: set a default value  
+      type: String, // Changed to store the URL directly
+      // default: '', // Optional: set a default value
     },
     availableBalance: {
       type: Number,
@@ -70,7 +70,6 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: 0,
     },
-
     expenseTracker: [
       {
         type: mongoose.Schema.Types.ObjectId,
