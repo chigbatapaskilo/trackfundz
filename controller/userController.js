@@ -151,7 +151,7 @@ exports.login=async(req,res)=>{
         if(!user.isVerified){
             return res.status(400).json({ message: 'Your account has not been verified yet. Please check your email and verify your account before logging in.' })
         }
-        const token =Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"24hr"})
+        const token =Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"24hrs"})
         res.status(200).json({
             message:`login successful`,
             data:user,
