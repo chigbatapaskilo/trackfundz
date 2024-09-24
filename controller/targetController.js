@@ -77,3 +77,48 @@ exports.findFullPaymentHistory = async (req, res) => {
         });  
     }  
 };
+exports.expenseHistorys=async(req,res)=>{
+    try {
+        const {userId}=req.user
+        const expenseHis=await targetModel.find({Trackuser:userId}).populate("expenseTracker")
+        const filterHistory=expenseHis.map(entry=>({
+            expenseName:entry.expenseName,
+            expenseAmount:entry.expenseAmount,
+            day:entry.day
+        }))
+        res.status(200).json({  
+            data: filterHistory
+        }); 
+        
+    } catch (error) {
+        res.status(500).json({  
+            message: 'An error occurred while processing your request.',  
+            errorMessage: error.message  
+        });   
+    }
+}
+
+exports.history=async(req,res)=>{
+    try {
+        const {userId}=req.user
+        const users=await targetModel.find({Trackuser:userId}).sort({date:-1})
+        const userData=users.map(user=>( {
+            amount:user.amount,
+            expenseAmount:user.expenseAmount,
+            expenseName:user.expenseName,
+            date:user.date,
+            budget:user.budget,
+            debt:user.debt,
+            day:user.day
+      }))
+        res.status(200).json({
+            message:'data retrived successfully',
+            data:userData
+        })
+    } catch (error) {
+        res.status(500).json({  
+            message: 'An error occurred while processing your request.',  
+            errorMessage: error.message  
+        });   
+    }
+}
