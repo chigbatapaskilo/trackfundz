@@ -145,7 +145,7 @@ exports.updateValidation=async(req,res,next)=>{
             "string.pattern.base": "last name should only contain letters.",
         }),
        
-        phoneNumber:joi.string().regex(/^\d{11}$/).message('Phone number must be exactly 11 digits',),
+        phoneNumber:joi.string(),
       
        
         
