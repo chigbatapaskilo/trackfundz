@@ -150,6 +150,7 @@ exports.createExpense = async (req, res) => {
       description,
       datePaid: fullDate,
       Trackuser: userId,
+      day: dayName,
     });
 
     const expenseData = new targetModel({
@@ -296,7 +297,7 @@ exports.weeklyExpenses = async (req, res) => {
       {
         $group: {
           _id: { $dayOfWeek: "$datePaid" }, // Group by day of the week
-          totalAmount: { $sum: "$expenseAmount" } // Sum the amount for each day
+          totalAmount: { $sum: "$amount" } // Sum the amount for each day
         }
       },
       {
