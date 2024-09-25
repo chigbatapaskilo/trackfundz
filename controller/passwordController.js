@@ -13,7 +13,7 @@ exports.forgetPassword=async(req,res)=>{
         return res.status(404).json('user not found')
         }
         const passwordToken=Jwt.sign({userId:user._id,email:user.email},process.env.JWT_SECRET,{expiresIn:"10 mins"})
-        const verificationLink=`https://trackfundz-wmhv.onrender.com/api/v1/verifyPassword/${passwordToken}`
+        const verificationLink=`https://trak-fundz.vercel.app/#/reset/${passwordToken}`
         const mailOption={
             email:user.email,
             subject:`forgetten password`,
