@@ -207,6 +207,8 @@ exports.getOne=async(req,res)=>{
         firstName: user.firstName,
         lastName:user.lastName,
         email: user. email,
+        profilePicture:user.profilePicture,
+        phoneNumber:user.phoneNumber,
         isVerified: user.isVerified,
         isAdmin:user.isAdmin,
         availableBalance: user.availableBalance,
@@ -264,7 +266,7 @@ exports.updateuserdetails=async(req,res)=>{
         const {userId}=req.params
         const {phoneNumber,firstName,lastName}=req.body
         const user=await userModel.findById(userId)
-        const file=req.file.path 
+       
         if(!user){
             return res.status(404).json('user not found.')
         }
@@ -275,7 +277,8 @@ exports.updateuserdetails=async(req,res)=>{
             lastName:lastName||user.lastName,
             
         }
-        if (file) {
+        if (req.file) {
+            const file=req.file.path 
             // Upload new image to Cloudinary
             const image = await cloudinary.uploader.upload(file);
             
