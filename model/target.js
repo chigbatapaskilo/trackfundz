@@ -4,9 +4,6 @@ const targetSchema = new mongoose.Schema({
   amount: {
     type: Number,
   },
-  expenseAmount: {
-    type: Number,
-  },
   description: {
     type: String,
   },

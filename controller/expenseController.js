@@ -154,7 +154,7 @@ exports.createExpense = async (req, res) => {
 
     const expenseData = new targetModel({
       day: dayName,
-      expenseAmount: amountValue,
+      amount: amountValue,
       description: expense,
       date:fullDate,
       Trackuser: userId,
@@ -240,6 +240,41 @@ exports.deleteExpense = async (req, res) => {
     });
   }
 };
+// exports.weeklyExpenses = async (req, res) => {
+//   try {
+//     const { userId } = req.user; // Extracting userId from req.user
+//     console.log("User ID:", userId); // Log user ID
+//     const date=new Date
+
+//     const days = [
+//       "Sunday",
+//       "Monday",
+//       "Tuesday",
+//       "Wednesday",
+//       "Thursday",
+//       "Friday",
+//       "Saturday",
+//     ];
+//     const today=days[date.getUTCDay()]
+
+//     // Log expenses before aggregation
+//    const expensesBeforeAggregation = await targetModel.find({ Trackuser: userId,day:today});
+//     console.log("Expenses before aggregation:", expensesBeforeAggregation);
+   
+
+//     res.status(200).json({
+//       message: 'Weekly expense summary',
+//       data: expensesBeforeAggregation
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: 'Error retrieving weekly expenses',
+//       errorMessage: error.message
+//     });
+//   }
+// };
+
+
 exports.weeklyExpenses = async (req, res) => {
   try {
     const { userId } = req.user; // Extracting userId from req.user
@@ -255,31 +290,37 @@ exports.weeklyExpenses = async (req, res) => {
       "Saturday",
     ];
 
-    // Log expenses before aggregation
-    const expensesBeforeAggregation = await targetModel.find({ Trackuser: userId});
-    console.log("Expenses before aggregation:", expensesBeforeAggregation);
-
+    // Aggregate expenses by day of the week
     const expenses = await targetModel.aggregate([
       { $match: { Trackuser: userId } },
       {
         $group: {
-          _id: { $dayOfWeek: "$day" },
-          totalAmount: { $sum: "$expenseAmount" }
+          _id: { $dayOfWeek: "$datePaid" }, // Group by day of the week
+          totalAmount: { $sum: "$expenseAmount" } // Sum the amount for each day
         }
       },
       {
         $project: {
-          day: { $arrayElemAt: [days, { $subtract: ["$_id", 1] }] },
+          day: { $arrayElemAt: [days, { $subtract: ["$_id", 1] }] }, // Map day number to day name
           totalAmount: 1,
           _id: 0
         }
       },
-      { $sort: { totalAmount: -1 } }
+      { $sort: { totalAmount: -1 } } // Optional: Sort by totalAmount
     ]);
+
+    // Prepare a response object with totals for each day
+    const weeklySummary = days.map(day => {
+      const dailyExpense = expenses.find(exp => exp.day === day);
+      return {
+        day: day,
+        totalAmount: dailyExpense ? dailyExpense.totalAmount : 0
+      };
+    });
 
     res.status(200).json({
       message: 'Weekly expense summary',
-      data: expenses
+      data: weeklySummary
     });
   } catch (error) {
     res.status(500).json({

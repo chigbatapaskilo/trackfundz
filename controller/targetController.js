@@ -106,7 +106,6 @@ exports.history=async(req,res)=>{
         const users=await targetModel.find({Trackuser:userId}).sort({date:-1})
         const userData=users.map(user=>( {
             amount:user.amount,
-            expenseAmount:user.expenseAmount,
             expenseName:user.expenseName,
             date:user.date,
             description:user.description,
