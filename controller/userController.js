@@ -264,7 +264,7 @@ exports.getAll=async(req,res)=>{
 exports.updateuserdetails=async(req,res)=>{
     try {
         const {userId}=req.params
-        const {phoneNumber,firstName,lastName}=req.body
+        const {firstName,lastName,phoneNumber}=req.body
         const user=await userModel.findById(userId)
        
         if(!user){
@@ -272,9 +272,9 @@ exports.updateuserdetails=async(req,res)=>{
         }
      
         const data={
-            phoneNumber:phoneNumber||user.phoneNumber,
             firstName:firstName||user.firstName,
             lastName:lastName||user.lastName,
+            phoneNumber:phoneNumber||user.phoneNumber,
             
         }
         if (req.file) {
