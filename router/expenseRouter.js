@@ -1,5 +1,5 @@
 const express=require('express');
-const { createExpense, expenseHistory ,  deleteExpense, getOneExpense, getDailyExpenses, weeklyExpenses} = require('../controller/expenseController');
+const { createExpense, expenseHistory ,  deleteExpense, getOneExpense,  weeklyExpenses} = require('../controller/expenseController');
 const { authorize } = require('../middleware/auth');
 const { createIncome } = require('../controller/incomecontroller');
 const { expenseValidation } = require('../middleware/debtValidation');
