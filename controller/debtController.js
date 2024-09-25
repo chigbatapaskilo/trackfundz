@@ -126,7 +126,8 @@ const paidDate = new Date(`${localYear}-${localMonth}-01T00:00:00Z`); // Example
             debts: debtId,
             paidDebt: debtRepaid,
             debt:findDebt.description,
-            Trackuser:userId
+            Trackuser:userId,
+             Type:"debt"
         });
      
     

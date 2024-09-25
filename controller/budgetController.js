@@ -105,7 +105,8 @@ exports.saveForTarget = async (req, res) => {
         date: fullDate,
         budgets: budgetId,
         totalAmount: savingsForBudget,
-        budget:findBudget.description,
+        description:findBudget.description,
+        Type:"budget",
         Trackuser:userId
     });
     await checkUser.save()

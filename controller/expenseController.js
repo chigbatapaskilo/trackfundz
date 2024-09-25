@@ -155,11 +155,11 @@ exports.createExpense = async (req, res) => {
     const expenseData = new targetModel({
       day: dayName,
       expenseAmount: amountValue,
-      expenseName: expense,
+      description: expense,
       date:fullDate,
       Trackuser: userId,
-    });
-    expenseData.expenseTracker.push(expenseData._id);
+      Type:"expense"
+    })
     await expenseData.save();
 
     await expenseMade.save();

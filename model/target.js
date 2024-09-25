@@ -7,17 +7,15 @@ const targetSchema = new mongoose.Schema({
   expenseAmount: {
     type: Number,
   },
-  expenseName: {
+  description: {
     type: String,
   },
   date: {
     type: String,
   },
-  budget: {
+  Type: {
     type: String,
-  },
-  debt: {
-    type: String,
+    enum:["expense","debt","budget"]
   },
   day: {
     type: String,
@@ -50,7 +48,7 @@ const targetSchema = new mongoose.Schema({
       ref: "users",
     },
   ],
-});
+},{timestamps:true});
 const targetModel = mongoose.model("target", targetSchema);
 
 module.exports = targetModel;

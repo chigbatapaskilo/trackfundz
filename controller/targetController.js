@@ -35,7 +35,8 @@ exports.dashBoardHistory=async(req,res)=>{
         const filteredHistory = budgetHistory.map(entry => ({  
             date: entry.date, // Assuming `date` is directly part of the entry  
             amount: entry.amount,
-            budget:entry.budget,  
+            description:entry.description, 
+            Type:entry.Type
         }));  
 
         // Sending the filtered result in the response  
@@ -62,7 +63,8 @@ exports.findFullPaymentHistory = async (req, res) => {
         const filteredDebtHistory = debtHistory.map(entry => ({  
             date: entry.date, // Assuming 'date' is directly part of the entry  
             amount: entry.amount, 
-            debt:entry.debt,
+            description:entry.description,
+            Type:entry.Type
             
         }));  
 
@@ -82,7 +84,7 @@ exports.expenseHistorys=async(req,res)=>{
         const {userId}=req.user
         const expenseHis=await targetModel.find({Trackuser:userId}).populate("expenseTracker")
         const filterHistory=expenseHis.map(entry=>({
-            expenseName:entry.expenseName,
+            description:entry.description,
             expenseAmount:entry.expenseAmount,
             day:entry.day
         }))
@@ -107,9 +109,9 @@ exports.history=async(req,res)=>{
             expenseAmount:user.expenseAmount,
             expenseName:user.expenseName,
             date:user.date,
-            budget:user.budget,
-            debt:user.debt,
-            day:user.day
+            description:user.description,
+            createdAt:user.createdAt,
+            Type:user.Type
       }))
         res.status(200).json({
             message:'data retrived successfully',
