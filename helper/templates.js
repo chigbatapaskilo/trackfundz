@@ -1,5 +1,5 @@
-exports.signUpTemplate=(verifyLink,firstName)=>{
-    return `
+exports.signUpTemplate = (verifyLink, firstName) => {
+  return `
     
 <!DOCTYPE html>
 <html>
@@ -76,10 +76,10 @@ exports.signUpTemplate=(verifyLink,firstName)=>{
 </body>
 </html>
     
-    `
-}
+    `;
+};
 exports.reSendverificationTemplate = (verifyLink, firstName) => {
-    return `
+  return `
     <!DOCTYPE html>
 <html>
 <head>
@@ -135,7 +135,7 @@ exports.reSendverificationTemplate = (verifyLink, firstName) => {
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to trackfundz !<</h1>
+            <h1>  trackfundz !<</h1>
         </div>
         <div class="content">
             <p>Hello ${firstName},</p>
@@ -154,10 +154,10 @@ exports.reSendverificationTemplate = (verifyLink, firstName) => {
     </div>
 </body>
 </html>
-    `
-}
+    `;
+};
 exports.forgetPasswordtemplate = (verifyLink, firstName) => {
-    return `
+  return `
     <!DOCTYPE html>
 <html>
 <head>
@@ -182,11 +182,14 @@ exports.forgetPasswordtemplate = (verifyLink, firstName) => {
             background-color: #f4f4f4; /* Light grey background */
         }
         .header {
-            background: #6404e0;
+             
+          
+            background:  #6404e0;
             padding: 10px;
             text-align: center;
             border-bottom: 1px solid #ddd;
-            color: #6404e0;
+            color: #ffffff;
+        
         }
         .content {
             padding: 20px;
@@ -213,14 +216,14 @@ exports.forgetPasswordtemplate = (verifyLink, firstName) => {
 <body>
     <div class="container">
         <div class="header">
-            <h1>forgetpassword  Email</h1>
+            <h1> trackfundz !</h1>
         </div>
         <div class="content">
             <p>Hello ${firstName},</p>
            
             <p>Please click the button below to reset  your account password:</p>
             <p>
-                <a href="${verifyLink}" class="button">Verify My Account</a>
+                <a href="${verifyLink}" class="button">change password</a>
             </p>
             <p>If you did not request to reset your password please ignore.</p>
             <p>Best regards,<br>trackfundz</p>
@@ -232,9 +235,5 @@ exports.forgetPasswordtemplate = (verifyLink, firstName) => {
     </div>
 </body>
 </html>
-    `
-}
-
-
-
-    
+    `;
+};
