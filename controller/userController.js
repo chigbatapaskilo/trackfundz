@@ -5,9 +5,7 @@ const Jwt=require('jsonwebtoken')
 const userModel=require('../model/userModel')
 const cloudinary=require('../config/cloudinary')
 require('dotenv').config()
-const fs=require('fs');
-const { description } = require('@hapi/joi/lib/base');
-
+const fs=require('fs')
 
 
 exports.signUp=async(req,res)=>{
